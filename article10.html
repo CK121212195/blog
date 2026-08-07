@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>仮想環境（venv）の作り方と必要性：プロジェクトごとの環境分離</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html"><h1>Python実践ガイド</h1></a>
+        <nav><a href="index.html">ホーム</a></nav>
+    </header>
+    <div class="container">
+        <h2>仮想環境（venv）の作り方と必要性：プロジェクトごとの環境分離</h2>
+        <p>Python初心者を脱却し、中級者へステップアップする上で絶対に避けて通れない概念が「仮想環境（Virtual Environment）」です。これを理解せずに色々なプログラムを作り続けると、いずれ必ず「環境が壊れて動かなくなる」という悲劇に見舞われます。</p>
+
+        <h3>なぜ仮想環境が必要なのか？（依存関係の地獄）</h3>
+        <p>例えば、あなたが「プロジェクトA」というWebアプリと、「プロジェクトB」というAIアプリを同じPCで作っているとします。プロジェクトAは「ライブラリXのバージョン1」を必要とし、プロジェクトBは「ライブラリXのバージョン2」を必要としている場合、PC全体のPython（グローバル環境）にインストールすると、バージョンが衝突してしまいます。</p>
+        <p>アップデートした途端に古いプロジェクトが動かなくなる現象を「依存関係の地獄」と呼びます。これを防ぐために、<strong>プロジェクトごとに独立した「Pythonの小部屋（仮想環境）」を作る</strong>のがベストプラクティスです。</p>
+
+        <h3>標準ツール「venv」の使い方</h3>
+        <p>Python 3系には、仮想環境を作るためのツール <code>venv</code> が標準で組み込まれています。</p>
+        <ol>
+            <li><strong>仮想環境の作成：</strong> ターミナルでプロジェクトのフォルダに移動し、<code>python -m venv myenv</code>（myenvは好きな名前）と実行します。これでフォルダ内に小部屋の元が作られます。</li>
+            <li><strong>仮想環境の有効化（アクティベート）：</strong> 使う前に「今からこの小部屋に入る」という宣言が必要です。Windowsなら <code>myenv\Scripts\activate</code>、Mac/Linuxなら <code>source myenv/bin/activate</code> と入力します。</li>
+        </ol>
+        <p>ターミナルの左端に <code>(myenv)</code> のように名前が表示されれば成功です。この状態でpip installを行えば、その小部屋の中にだけライブラリがインストールされ、他のプロジェクトに影響を与えることは一切ありません。作業が終わったら <code>deactivate</code> と打つと小部屋から出ることができます。</p>
+    </div>
+</body>
+</html>
