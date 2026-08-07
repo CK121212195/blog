@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>外部ライブラリの導入方法：pipの使い方とよくあるエラー</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html"><h1>Python実践ガイド</h1></a>
+        <nav><a href="index.html">ホーム</a></nav>
+    </header>
+    <div class="container">
+        <h2>外部ライブラリの導入方法：pipの使い方とよくあるエラー</h2>
+        <p>Pythonが世界中でこれほど人気を集めている最大の理由は、「豊富で強力な外部ライブラリ」が存在するからです。Webスクレイピング、AI（機械学習）、データ分析など、複雑な機能も世界中の天才たちが作ったパッケージを借りることで簡単に実装できます。</p>
+        <p>その魔法のパッケージを自分のPCにインストールするためのツールが「pip（ピップ）」です。</p>
+
+        <h3>pipの基本的な使い方</h3>
+        <p>pipはPythonをインストールすると標準で付いてくるパッケージ管理ツールです。コマンドプロンプトやターミナル（黒い画面）を開いてコマンドを打ち込みます。</p>
+        <p>一番使うのはインストールコマンドです。<br>
+        <code>pip install ライブラリ名</code><br>
+        例えば、Webサイトの情報を取得する有名なライブラリ「requests」を入れたい場合は、<code>pip install requests</code> と入力してEnterを押すだけで、インターネット上から自動的にダウンロードと設定を行ってくれます。</p>
+
+        <h3>よくあるエラー1：pipコマンドが認識されない</h3>
+        <p>Windowsユーザーに多いのが「'pip' は、内部コマンドまたは外部コマンドとして認識されていません」というエラーです。これは、Pythonをインストールした際の「パス（Path）」が通っていないことが原因です。Pythonの再インストールを行い、「Add Python to PATH」のチェックを入れるのが一番手っ取り早い解決策です。</p>
+
+        <h3>よくあるエラー2：権限エラー（Permission denied）</h3>
+        <p>MacやLinuxでよく起こるのが、インストール権限がないというエラーです。システム全体に影響を与える場所にインストールしようとしているためブロックされています。この場合、コマンドの末尾に <code>--user</code> を付けて現在のユーザー専用にインストールするか、この後解説する「仮想環境」を使うことで解決します。</p>
+    </div>
+</body>
+</html>
