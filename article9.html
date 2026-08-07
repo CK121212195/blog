@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>業務効率化の第一歩：PythonでCSVファイルを処理する</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html"><h1>Python実践ガイド</h1></a>
+        <nav><a href="index.html">ホーム</a></nav>
+    </header>
+    <div class="container">
+        <h2>業務効率化の第一歩：PythonでCSVファイルを処理する</h2>
+        <p>「日々の退屈な事務作業を自動化したい」という動機でPythonを始める方は非常に多いです。そして、その業務効率化の第一歩となるのが、Excelなどでおなじみの「CSVファイル」の処理です。</p>
+        <p>顧客リストや売上データなど、世の中の多くのシステムはCSV形式でデータを出力します。これをPythonで自由自在に操れるようになりましょう。</p>
+
+        <h3>標準ライブラリ「csv」モジュール</h3>
+        <p>Pythonには、わざわざ外部ライブラリをインストールしなくても、標準でCSVを扱うための <code>csv</code> モジュールが用意されています。ファイルの読み書きで学んだ <code>with open()</code> と組み合わせて使います。</p>
+        <p><code>csv.reader()</code> を使うと、CSVファイルの各行をリストとして読み込むことができます。for文を回すことで、「1行ずつデータを取り出し、特定の条件に合うものだけを別のファイルに書き出す」といったフィルター処理があっという間に完成します。</p>
+
+        <h3>辞書として読み込む便利な「DictReader」</h3>
+        <p>1行目がヘッダー（列の名前）になっているCSVファイルの場合、<code>csv.DictReader()</code> を使うと非常に便利です。各行のデータが辞書型として読み込まれるため、インデックス番号（0や1）ではなく、<code>row["売上金額"]</code> のように列の名前でデータにアクセスでき、コードが劇的に読みやすくなります。</p>
+
+        <h3>より高度な処理なら「pandas」</h3>
+        <p>もし、数万行、数十万行といった巨大なCSVファイルを扱ったり、複雑な集計（グループ化やピボットテーブルなど）を行いたい場合は、標準のcsvモジュールではなく、データ分析用の外部ライブラリである <strong>pandas</strong> を導入することをおすすめします。<code>pandas.read_csv()</code> のたった1行で、データを強力な表形式オブジェクトに変換してくれます。</p>
+    </div>
+</body>
+</html>
