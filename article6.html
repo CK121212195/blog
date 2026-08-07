@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エラーで挫折しない！Pythonの例外処理（try-except）の基本</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html"><h1>Python実践ガイド</h1></a>
+        <nav><a href="index.html">ホーム</a></nav>
+    </header>
+    <div class="container">
+        <h2>エラーで挫折しない！Pythonの例外処理（try-except）の基本</h2>
+        <p>プログラミングにおいて、エラー（バグ）は避けて通れません。しかし、予期せぬエラーが発生した瞬間にプログラム全体が強制終了してしまうと、ユーザーにとって非常に使い勝手の悪いアプリになってしまいます。</p>
+        <p>エラーが起きてもプログラムを止めず、安全に回避するための仕組みが「例外処理（try-except）」です。</p>
+
+        <h3>例外（Exception）とは？</h3>
+        <p>文法上のミス（SyntaxError）とは異なり、文法は正しいけれど実行中に発生してしまうエラーを「例外」と呼びます。</p>
+        <p>代表的な例としては、「数値をゼロで割り算しようとした（ZeroDivisionError）」、「存在しないファイルを開こうとした（FileNotFoundError）」、「数字を入力すべき場所に文字が入力された（ValueError）」などがあります。</p>
+
+        <h3>try-exceptブロックの使い方</h3>
+        <p>例外処理の基本は <code>try</code> と <code>except</code> です。<br>
+        まず、エラーが起きるかもしれない危険なコードを <code>try:</code> のブロック（インデントされた部分）の中に書きます。</p>
+        <p>もしtryの中でエラーが発生すると、プログラムは強制終了せず、直ちに <code>except:</code> のブロックにジャンプします。ここで「エラーが起きたときの代替処理（例：『正しい数値を入力してください』と画面に表示するなど）」を行うことができます。</p>
+
+        <h3>安全で堅牢なコードを目指して</h3>
+        <p>例外処理をマスターすると、外部からの入力（ユーザー入力やWebからのデータ取得など）に依存するプログラムの安定性が格段に上がります。</p>
+        <p>ただし、「すべてのエラーを無視して無理やり動かし続ける」ような無責任なコードを書くための機能ではありません。想定されるエラーを個別にキャッチし、適切に対処する（あるいは安全に終了させる）ことが、中級者へのステップアップとなります。</p>
+    </div>
+</body>
+</html>
