@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pythonでファイル操作（読み込み・書き込み）をマスターする</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html"><h1>Python実践ガイド</h1></a>
+        <nav><a href="index.html">ホーム</a></nav>
+    </header>
+    <div class="container">
+        <h2>Pythonでファイル操作（読み込み・書き込み）をマスターする</h2>
+        <p>プログラムの中でデータを扱うだけでなく、外部のテキストファイルを読み込んで処理したり、計算結果を新しいファイルとして保存したりできると、Pythonの活用幅は一気に広がります。</p>
+        <p>今回は、Pythonの標準機能を使ったファイル操作の基本について解説します。</p>
+
+        <h3>ファイルの開き方と閉じ方（openとclose）</h3>
+        <p>ファイルを操作するには、まず <code>open()</code> 関数を使ってファイルを開きます。このとき、「読み込みモード（'r'）」か「書き込みモード（'w'）」か「追記モード（'a'）」かを指定する必要があります。</p>
+        <p>そして、非常に重要なのが、操作が終わったら必ず <code>close()</code> を使ってファイルを閉じることです。閉じ忘れると、メモリが無駄に消費されたり、データが正常に保存されなかったりする原因になります。</p>
+
+        <h3>最強の構文「withステートメント」</h3>
+        <p>しかし、人間は <code>close()</code> を書き忘れる生き物です。また、途中でエラーが起きた場合に閉じられなくなってしまうリスクもあります。そこでPythonでは、安全にファイルを扱うための <strong>with文</strong> が用意されています。</p>
+        <p><code>with open('sample.txt', 'r') as file:</code> のように書くと、インデントされたブロックの処理が終わった瞬間に、Pythonが<strong>自動的にファイルを閉じてくれます。</strong> 現在のPython開発において、ファイル操作はこのwith文を使うのが絶対的な基本ルール（ベストプラクティス）となっています。</p>
+
+        <h3>読み込みと書き込みの基本メソッド</h3>
+        <p>読み込みには <code>read()</code>（ファイル全体を一度に読み込む）、<code>readline()</code>（1行ずつ読み込む）、<code>readlines()</code>（すべての行をリストとして取得する）を使い分けます。<br>
+        書き込みには <code>write()</code> を使い、文字列をファイルに書き込みます。既存のファイルに上書きするのか、末尾に追加するのかは、open時のモード指定によって決まります。</p>
+    </div>
+</body>
+</html>
