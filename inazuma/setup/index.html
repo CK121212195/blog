@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="theme-color" content="#f7f2e8">
+<meta name="description" content="稲妻守の封じの手順。鍵をつくり、札に書き、受取アドレスを照合して、NFCに書き込み、銀帯で封じます。">
+<title>封じの手順 ── 稲妻守</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700;800&amp;family=Noto+Sans+JP:wght@400;500;700&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap">
+<link rel="stylesheet" href="../assets/app.css">
+<link rel="stylesheet" href="setup.css">
+</head>
+<body class="bg-washi">
+<div class="app" id="app">
+  <header class="top">
+    <a class="brand" href="../"><i aria-hidden="true"></i>稲妻守</a>
+    <span class="top-label" id="top-label">封じの手順</span>
+    <div class="dots" id="dots" aria-hidden="true" hidden><span></span><span></span><span></span><span></span><span></span></div>
+  </header>
+
+  <main class="main">
+
+    <!-- 0 はじめに -->
+    <section class="step" id="s0" data-step="0" aria-labelledby="h0">
+      <p class="kicker">封じの手順</p>
+      <h1 class="h" id="h0" tabindex="-1"><span class="ph">あなたの稲妻守を、</span><span class="ph">封じましょう</span></h1>
+      <p class="lead">鍵をつくるのも、封をするのも、あなたの手元だけ。このサイトが扱うのは、公開の受取アドレスだけです。</p>
+      <ol class="plan">
+        <li style="--i:0"><b>1</b><span><strong>鍵をつくり、札に書く</strong><small>ウォレットで、この御守り専用の鍵を</small></span></li>
+        <li style="--i:1"><b>2</b><span><strong>札を確かめる</strong><small>書いた札から、同じアドレスになるか</small></span></li>
+        <li style="--i:2"><b>3</b><span><strong>アドレスを照合する</strong><small>受取アドレスを、4文字ずつ指で</small></span></li>
+        <li style="--i:3"><b>4</b><span><strong>NFCに書き込む</strong><small>かざすと、この御守りのページが開くように</small></span></li>
+        <li style="--i:4"><b>5</b><span><strong>銀帯で封じる</strong><small>札を納めて、背面の継ぎ目に銀帯を</small></span></li>
+      </ol>
+      <div class="card">
+        <h2 class="card-h">用意するもの</h2>
+        <ul class="need">
+          <li>稲妻守のキット（御守り・札・銀帯）</li>
+          <li>ウォレットアプリの入ったスマホ</li>
+          <li>油性の細いペン</li>
+          <li>NFCに書き込めるスマホ（Android は、このページから。iPhone は、書き込み用のアプリで）</li>
+        </ul>
+      </div>
+      <div class="nav">
+        <button type="button" class="btn wide ink" id="resume" hidden>続きから</button>
+        <button type="button" class="btn wide" id="start">はじめる</button>
+        <button type="button" class="link-btn" id="restart" hidden>最初からはじめる</button>
+      </div>
+    </section>
+
+    <!-- 1 鍵をつくり、札に書く -->
+    <section class="step" id="s1" data-step="1" aria-labelledby="h1" hidden>
+      <p class="kicker">手順 1 / 5</p>
+      <h2 class="h" id="h1" tabindex="-1">鍵をつくり、札に書く</h2>
+      <p class="lead">お使いのウォレットアプリで、この御守り専用の鍵をつくります。札に書く形を選んでください。</p>
+      <div class="seg" id="method-seg" role="group" aria-label="札に書く形">
+        <span class="seg-ind l" aria-hidden="true"></span>
+        <button type="button" data-method="seed" aria-pressed="true">12語（おすすめ）</button>
+        <button type="button" data-method="key" aria-pressed="false">秘密鍵</button>
+      </div>
+      <div class="panel" id="m-seed">
+        <ol class="how">
+          <li>ウォレットアプリで、<b>新しいウォレット</b>をつくります。ふだん使いのウォレットとは分けてください。</li>
+          <li>表示された<b>12語</b>（復元フレーズ）を、番号をつけて札に書き写します。</li>
+          <li>札のすみに、使ったウォレットの名前と、アドレスの種類（bc1q など）も書き添えます。受け取った人が、同じ形で復元できます。</li>
+        </ol>
+        <p class="note">パスフレーズ（追加の合言葉）は付けないでください。付けると、札に書いていない合言葉がなければ復元できません。</p>
+        <figure class="slip">
+          <svg viewBox="0 0 320 196" role="img" aria-label="札の書き方の例。12語を番号つきで2列に書き、下にウォレットの名前とアドレスの種類を書く">
+            <rect x="1" y="1" width="318" height="194" rx="12" fill="#FFFDF8" stroke="#E4DCCD" stroke-width="1.5"/>
+            <path d="M295 14l-8 13h6l-4 11 10-15h-6l4-9z" fill="#D2441F"/>
+            <g font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" fill="#5F5A51">
+              <text x="18" y="34">1</text><text x="18" y="56">2</text><text x="18" y="78">3</text><text x="18" y="100">4</text><text x="18" y="122">5</text><text x="18" y="144">6</text>
+              <text x="166" y="34">7</text><text x="166" y="56">8</text><text x="166" y="78">9</text><text x="160" y="100">10</text><text x="160" y="122">11</text><text x="160" y="144">12</text>
+            </g>
+            <g stroke="#CFC5B3" stroke-width="1.2" stroke-linecap="round">
+              <path d="M34 36h108M34 58h108M34 80h108M34 102h108M34 124h108M34 146h108M182 36h108M182 58h108M182 80h108M182 102h108M182 124h108M182 146h108"/>
+            </g>
+            <g font-family="Noto Sans JP, sans-serif" font-size="10.5" fill="#5F5A51"><text x="18" y="176">ウォレット</text><text x="182" y="176">種類 bc1q</text></g>
+            <path d="M74 178h86M236 178h54" stroke="#CFC5B3" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <figcaption>札の書き方（例）。細いペンで、小さくても読める字で。</figcaption>
+        </figure>
+      </div>
+      <div class="panel" id="m-key" hidden>
+        <ol class="how">
+          <li>この御守り専用の<b>秘密鍵</b>を1つ用意します（WIF形式。5・K・L で始まる文字列）。</li>
+          <li>秘密鍵を、札にはっきり書き写します。1文字ちがうだけで、復元できなくなります。</li>
+          <li>使ったウォレットの名前も書き添えます。</li>
+        </ol>
+        <p class="note">秘密鍵を読み込める（スイープできる）ウォレットは、12語より限られます。贈るなら、12語がおすすめです。</p>
+      </div>
+      <div class="safe">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B53A1D" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.6-7 10-4-1.4-7-5.4-7-10V6z"/></svg>
+        <span>12語や秘密鍵は、この画面には入力しません。紙に手で書くだけです。写真にも撮らないでください。</span>
+      </div>
+      <div class="nav">
+        <button type="button" class="btn wide" data-next>鍵をつくって、札に書いた</button>
+        <button type="button" class="link-btn" data-back>もどる</button>
+      </div>
+    </section>
+
+    <!-- 2 札を確かめる -->
+    <section class="step" id="s2" data-step="2" aria-labelledby="h2" hidden>
+      <p class="kicker">手順 2 / 5</p>
+      <h2 class="h" id="h2" tabindex="-1">札を確かめる</h2>
+      <p class="lead">確かめるのは、お使いのウォレットで。このサイトは、確かめるために鍵を求めません。</p>
+      <div class="checks" id="checks">
+        <button type="button" class="ck" data-ck="0" aria-pressed="false"><span class="ck-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="ck-t"></span></button>
+        <button type="button" class="ck" data-ck="1" aria-pressed="false"><span class="ck-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="ck-t"></span></button>
+        <button type="button" class="ck" data-ck="2" aria-pressed="false"><span class="ck-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="ck-t"></span></button>
+      </div>
+      <details class="more" id="restore-how">
+        <summary>復元して確かめる方法</summary>
+        <div>
+          <p>まだ入金していないので、試しても失うものはありません。</p>
+          <ol>
+            <li id="rh-1"></li>
+            <li>出てきた最初の受取アドレスが、手順1のウォレットと同じなら、札は正しく書けています。</li>
+            <li>確かめたら、復元した側のウォレットは削除してかまいません。ふだん使いのウォレットは消さないでください。</li>
+          </ol>
+          <p>違ったときは、書き間違いか、ウォレットの種類（アドレスの形）の違いです。新しい鍵でつくり直すのが確実です。まだ何も書き込んでいないので、やり直せます。</p>
+        </div>
+      </details>
+      <div class="nav">
+        <button type="button" class="btn wide" data-next id="checks-next" aria-disabled="true">すべて確かめると進めます</button>
+        <button type="button" class="link-btn" data-back>もどる</button>
+      </div>
+    </section>
+
+    <!-- 3 アドレスを照合する -->
+    <section class="step" id="s3" data-step="3" aria-labelledby="h3" hidden>
+      <p class="kicker">手順 3 / 5</p>
+      <h2 class="h" id="h3" tabindex="-1">アドレスを照合する</h2>
+      <p class="lead">手順1のウォレットの「受け取る」画面から、受取アドレスを貼り付けます。</p>
+      <div class="field">
+        <label class="field-l" for="addr">受取アドレス</label>
+        <div class="addr-row">
+          <textarea id="addr" rows="2" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="bc1q…" aria-describedby="addr-msg"></textarea>
+          <button type="button" class="paste press" id="paste">貼り付け</button>
+        </div>
+      </div>
+      <p class="msg" id="addr-msg" aria-live="polite"></p>
+      <div class="seg" id="net-seg" role="group" aria-label="テスト用のネットワーク" hidden>
+        <span class="seg-ind l" aria-hidden="true"></span>
+        <button type="button" data-net="test" aria-pressed="true">testnet4</button>
+        <button type="button" data-net="signet" aria-pressed="false">signet</button>
+      </div>
+      <div class="verify" id="verify" hidden>
+        <p class="hint">ウォレットの画面と見比べて、合っていたチップを押してください。</p>
+        <div class="chips" id="chips"></div>
+        <p class="count" id="chip-count">照合 0 / 0</p>
+      </div>
+      <div class="field">
+        <label class="field-l" for="name">名前やひとこと（なくてもかまいません）</label>
+        <input id="name" type="text" maxlength="40" placeholder="はるへ" autocomplete="off" enterkeyhint="done" aria-describedby="name-msg">
+        <div class="meter" id="meter" aria-hidden="true"><span></span></div>
+        <p class="msg sub" id="name-msg">御守りのページの上に出ます。</p>
+      </div>
+      <p class="note">このアドレスは御守りに書き込まれ、かざした人は誰でも残高を見られます。動かせるのは、札の鍵を持つ人だけです。</p>
+      <div class="nav">
+        <button type="button" class="btn wide" data-next id="addr-next" aria-disabled="true">すべて照合すると進めます</button>
+        <button type="button" class="link-btn" data-back>もどる</button>
+      </div>
+    </section>
+
+    <!-- 4 NFCに書き込む -->
+    <section class="step" id="s4" data-step="4" aria-labelledby="h4" hidden>
+      <p class="kicker">手順 4 / 5</p>
+      <h2 class="h" id="h4" tabindex="-1">NFCに書き込む</h2>
+      <p class="lead">御守りの中のタグに、この御守りのページのURLを書き込みます。</p>
+      <div class="seg" id="os-seg" role="group" aria-label="お使いのスマホ">
+        <span class="seg-ind l" aria-hidden="true"></span>
+        <button type="button" data-os="android" aria-pressed="true">Android（Chrome）</button>
+        <button type="button" data-os="iphone" aria-pressed="false">iPhone・その他</button>
+      </div>
+      <div class="urlbox">
+        <div class="urlbox-l"><span>書き込むURL</span><span id="url-size"></span></div>
+        <code id="url"></code>
+      </div>
+
+      <div class="os-panel" id="os-android">
+        <p class="note" id="no-webnfc" hidden>このブラウザは、NFCへの書き込みに対応していません。Android の Chrome で開くか、「iPhone・その他」の方法で書き込んでください。</p>
+        <div class="nfc-wrap">
+          <button type="button" class="nfc" id="nfc-write" aria-describedby="nfc-sub">
+            <span class="ring" aria-hidden="true"></span><span class="ring" aria-hidden="true"></span><span class="ring" aria-hidden="true"></span>
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8.5a8 8 0 0 1 0 7"/><path d="M9.5 6.5a12 12 0 0 1 0 11"/><path d="M13 4.5a16 16 0 0 1 0 15"/><circle cx="17.5" cy="12" r="1.2" fill="currentColor"/></svg>
+            <svg class="ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+            <span class="sr-only" id="nfc-sr">NFCに書き込む</span>
+          </button>
+          <strong id="nfc-text">NFCに書き込む</strong>
+          <span class="sub" id="nfc-sub">押したら、御守りをスマホの背面に当てて、そのまま待ちます。NFCの位置は機種によって違います。</span>
+        </div>
+        <div class="after" id="nfc-after" hidden>
+          <button type="button" class="btn wide ghost-ink" id="nfc-verify">読み取って確かめる</button>
+          <p class="msg sub" id="verify-msg">御守りをいったん離してから押し、もう一度当てます。</p>
+          <button type="button" class="btn wide ghost-ink" id="nfc-lock" aria-disabled="true">確かめると、ロックできます</button>
+          <p class="sub" id="lock-msg">ロックすると、だれもこのタグを書き換えられなくなります（偽のページへのすり替えを防げます）。あなた自身も、二度と書き換えられません。ロックしなくても、次へ進めます。</p>
+        </div>
+      </div>
+
+      <div class="os-panel" id="os-iphone" hidden>
+        <div class="panel">
+          <p class="p">iPhone のブラウザからは、NFCに書き込めません。書き込み用のアプリ（例：NFC Tools）を使います。</p>
+          <button type="button" class="btn wide ink" id="copy-url">URLをコピー</button>
+          <ol class="how">
+            <li>アプリで「書き込む（Write）」→「レコードを追加（Add a record）」→「URL / URI」を選びます。</li>
+            <li>コピーしたURLを貼り付けます。アプリによっては「https://」が先に入っているので、二重にならないように。</li>
+            <li>書き込みを押して、御守りを iPhone の上部に当てます。</li>
+            <li>ホーム画面に戻って御守りをかざし、出てきた通知から、御守りのページが開くか確かめます。</li>
+          </ol>
+        </div>
+        <button type="button" class="ck" id="ios-ck" aria-pressed="false"><span class="ck-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="ck-t">書き込んで、かざすと御守りのページが開いた</span></button>
+        <p class="sub">ロックはアプリの機能で行えます（NFC Tools なら「その他（Other）」→「タグをロック（Lock tag）」）。取り消せません。</p>
+      </div>
+
+      <div class="nav">
+        <button type="button" class="btn wide" data-next id="nfc-next" aria-disabled="true">書き込むと進めます</button>
+        <button type="button" class="link-btn" data-back>もどる</button>
+      </div>
+    </section>
+
+    <!-- 5 銀帯で封じる -->
+    <section class="step" id="s5" data-step="5" aria-labelledby="h5" hidden>
+      <p class="kicker">手順 5 / 5</p>
+      <h2 class="h" id="h5" tabindex="-1">銀帯で、封をする</h2>
+      <p class="lead">札を折って引き出しに納め、引き出しを閉じます。背面の継ぎ目をまたぐように、銀帯を貼ります。</p>
+      <figure class="scene" id="scene" role="img" aria-label="御守りの背面の継ぎ目をまたぐように、銀帯を貼るところ">
+        <svg viewBox="0 0 240 380" aria-hidden="true">
+          <defs>
+            <linearGradient id="bandg" x1="0" y1="0" x2="1" y2=".18">
+              <stop offset="0" stop-color="#F4F6F7"/><stop offset=".38" stop-color="#BFC7CC"/><stop offset=".52" stop-color="#EEF1F3"/><stop offset=".78" stop-color="#9AA4AA"/><stop offset="1" stop-color="#E6EAEC"/>
+            </linearGradient>
+            <clipPath id="bandclip"><rect x="93" y="136" width="54" height="180" rx="4"/></clipPath>
+          </defs>
+          <ellipse cx="120" cy="368" rx="92" ry="8" fill="#1E2224" opacity=".12"/>
+          <path d="M116 74C94 34 132 4 158 16c22 11 8 42-30 58" fill="none" stroke="#8F2014" stroke-width="7" stroke-linecap="round"/>
+          <path d="M64 70H176L210 104V344L194 360H46L30 344V104Z" fill="#D2441F"/>
+          <path d="M30 306H210V344L194 360H46L30 344Z" fill="#C63E1B"/>
+          <path d="M64 70H176L210 104V344L194 360H46L30 344V104Z" fill="none" stroke="#A8361A" stroke-width="2"/>
+          <path d="M30 306H210" stroke="#8F2814" stroke-width="2"/>
+          <rect x="104" y="80" width="32" height="11" rx="5.5" fill="#6E1A0E"/>
+          <circle cx="120" cy="72" r="9" fill="#8F2014"/>
+          <g class="band">
+            <rect x="93" y="136" width="54" height="180" rx="4" fill="url(#bandg)"/>
+            <g clip-path="url(#bandclip)"><path class="shine" d="M40 330h26l40-200h-26z" fill="#fff" fill-opacity=".7"/></g>
+          </g>
+          <g class="stamp">
+            <circle cx="120" cy="224" r="27" fill="#FFFDF8" fill-opacity=".92" stroke="#D2441F" stroke-width="3"/>
+            <text x="120" y="236" text-anchor="middle" font-family="Shippori Mincho, Hiragino Mincho ProN, Yu Mincho, serif" font-weight="800" font-size="32" fill="#D2441F">封</text>
+          </g>
+        </svg>
+      </figure>
+      <ul class="tips">
+        <li>貼る前に、継ぎ目のほこりや指の脂をふき取る</li>
+        <li>台紙から端を持ってはがし、まっすぐ当てる</li>
+        <li>貼ったら、指で端までしっかり押さえる</li>
+      </ul>
+      <div class="hold-wrap">
+        <button type="button" class="hold" id="hold" aria-describedby="hold-sub">
+          <svg viewBox="0 0 132 132" aria-hidden="true"><circle class="track" cx="66" cy="66" r="60"/><circle class="prog" id="hold-prog" cx="66" cy="66" r="60"/></svg>
+          <span class="c" aria-hidden="true">封</span>
+          <span class="sr-only">長押しで封じる</span>
+        </button>
+        <strong id="hold-text">銀帯を貼ったら、長押しで封じる</strong>
+        <span class="sub" id="hold-sub">押しつづけると、輪が一周して封じます</span>
+        <button type="button" class="link-btn small" id="hold-alt">長押しせずに封じる</button>
+      </div>
+      <div class="nav">
+        <button type="button" class="link-btn" data-back>もどる</button>
+      </div>
+    </section>
+
+    <!-- 6 封じました -->
+    <section class="step" id="s6" data-step="6" aria-labelledby="h6" hidden>
+      <div class="preview bg-night">
+        <p class="pv-name" id="pv-name" hidden></p>
+        <div class="pv-em" id="pv-em"></div>
+        <span class="tchip s-empty"><span class="t">まだ空</span></span>
+      </div>
+      <h2 class="h center" id="h6" tabindex="-1">封じました</h2>
+      <p class="lead center">好きなときに入金を。承認されると、そのブロックから雷雲の紋が描かれます。</p>
+      <div class="acts">
+        <button type="button" class="btn wide" id="show-qr">入金用のQRを表示</button>
+        <a class="btn wide ghost-ink" id="open-m" href="../m/">御守りのページを開く</a>
+      </div>
+      <div class="card">
+        <h3 class="card-h">これから</h3>
+        <ul class="need">
+          <li>入金は、この御守りのアドレスへ。ウォレットの「受け取る」画面は、入金のあと別のアドレスに変わることがあります。御守りに数えられるのは、このアドレスへの入金だけです。</li>
+          <li>紋は、最初に承認された入金のブロックで決まります。少額で試しに入金すると、その入金で紋が決まります。</li>
+          <li>贈るなら、手順1のウォレットをスマホに残すか決めておきましょう。残せば、あなたも動かせます。消せば、札だけが鍵になります。</li>
+        </ul>
+      </div>
+      <div class="nav">
+        <button type="button" class="link-btn" id="again">別の御守りを封じる</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B53A1D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.6-7 10-4-1.4-7-5.4-7-10V6z"/></svg>
+    <p>このサイトが秘密鍵や12語を尋ねることはありません</p>
+  </footer>
+</div>
+
+<button class="sheet-back" id="sheet-back" type="button" aria-label="閉じる" tabindex="-1"></button>
+<section class="sheet" id="qr-sheet" role="dialog" aria-modal="true" aria-labelledby="qr-title" aria-hidden="true">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="sheet-head">
+    <h2 id="qr-title">この御守りに入れる</h2>
+    <button type="button" class="x press" data-close aria-label="閉じる"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="qr" id="qr" role="img" aria-label="入金用のQRコード"></div>
+  <p class="qr-addr" id="qr-addr"></p>
+  <button type="button" class="btn wide ink" id="copy-addr">アドレスをコピー</button>
+  <p class="sheet-small">入金が承認されると、そのブロックから雷雲の紋が描かれます。少額だと、あとで移すときの手数料の割合が大きくなります。</p>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<noscript><p class="noscript">この手順は JavaScript で動きます。JavaScript を有効にしてください。</p></noscript>
+<script type="module" src="../assets/js/setup.js"></script>
+</body>
+</html>
