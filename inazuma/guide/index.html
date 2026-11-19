@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="theme-color" content="#f7f2e8">
+<meta name="description" content="稲妻守の中のsatsを、自分のウォレットへ移す手順。鍵の入力は、お使いのウォレットの中だけで行います。">
+<title>移し方の手順 ── 稲妻守</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700;800&amp;family=Noto+Sans+JP:wght@400;500;700&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap">
+<link rel="stylesheet" href="../assets/app.css">
+<link rel="stylesheet" href="../setup/setup.css">
+<link rel="stylesheet" href="guide.css">
+</head>
+<body class="bg-washi">
+<div class="app">
+  <header class="top">
+    <a class="brand" href="../"><i aria-hidden="true"></i>稲妻守</a>
+    <span class="top-label">移し方の手順</span>
+  </header>
+
+  <main class="main">
+    <article class="step gd">
+      <p class="kicker">移し方の手順</p>
+      <h1 class="h"><span class="ph">御守りのsatsを、</span><span class="ph">自分のウォレットへ</span></h1>
+      <p class="lead">札の鍵を、あなたのウォレットアプリに読み込んで送ります。鍵を入れるのは、ウォレットアプリの中だけ。このサイトや販売者が鍵を受け取ることはありません。</p>
+
+      <div class="warn-box" role="note">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.6-7 10-4-1.4-7-5.4-7-10V6z"/><path d="M12 8v5"/><path d="M12 16.5v.01"/></svg>
+        <div>
+          <strong>12語や秘密鍵を、ウェブサイトに入力しないでください</strong>
+          <p>鍵や12語の入力を求めるページ、聞き出そうとする人は、詐欺です。サポートを名乗る連絡にも答えないでください。このサイトも販売者も、尋ねることはありません。</p>
+        </div>
+      </div>
+
+      <section class="card" aria-labelledby="g-before">
+        <h2 class="card-h" id="g-before">開ける前に</h2>
+        <ul class="need">
+          <li>御守りをかざして、残高と紋（雷雲）を確かめる。</li>
+          <li>送り先にする、あなたのふだんのウォレットの「受け取る」アドレスを用意する。</li>
+          <li>人のいない場所で開ける。札を写真に撮らない、人に見せない。</li>
+        </ul>
+      </section>
+
+      <div class="seg" id="kind-seg" role="group" aria-label="札に書かれている形">
+        <span class="seg-ind l" aria-hidden="true"></span>
+        <button type="button" data-kind="seed" aria-pressed="true">12語のとき</button>
+        <button type="button" data-kind="key" aria-pressed="false">秘密鍵のとき</button>
+      </div>
+
+      <section class="panel" id="k-seed" aria-label="12語のときの手順">
+        <ol class="how">
+          <li>銀帯をはがし、引き出しから札を出します。</li>
+          <li>ウォレットアプリで「ウォレットを復元」（「インポート」）を選び、札の12語を入れます。札にウォレットの名前やアドレスの種類（bc1q など）が書いてあれば、同じものを選びます。</li>
+          <li>復元したウォレットに、御守りと同じ残高が出るのを確かめます。出ないときは、アドレスの種類（導出の形）が違うかもしれません。札に書かれた種類を選び直してください。</li>
+          <li>「送る」で、ふだんのウォレットのアドレス宛てに、全額を送ります（「最大」「全額」などのボタン）。手数料は、ウォレットが示します。</li>
+          <li>承認されると、御守りの紋が「稲妻」に変わります。</li>
+        </ol>
+      </section>
+      <section class="panel" id="k-key" aria-label="秘密鍵のときの手順" hidden>
+        <ol class="how">
+          <li>銀帯をはがし、引き出しから札を出します。</li>
+          <li>秘密鍵を読み込める（「スイープ」「インポート」ができる）ウォレットアプリで、札の秘密鍵を入れます。</li>
+          <li>読み込んだ鍵に、御守りと同じ残高が出るのを確かめます。</li>
+          <li>ふだんのウォレットのアドレス宛てに、全額を送ります。スイープの場合は、読み込んだウォレットへそのまま移ります。</li>
+          <li>承認されると、御守りの紋が「稲妻」に変わります。</li>
+        </ol>
+      </section>
+
+      <section class="card" aria-labelledby="g-fee">
+        <h2 class="card-h" id="g-fee">手数料のこと</h2>
+        <p class="p">送るときに、オンチェーンの手数料がかかります。御守りをかざした画面の「受け取った方へ」→「開けて、自分のウォレットへ移す」で、いまのめやす（mempool.space の推奨値から計算）を見られます。実際の手数料は、お使いのウォレットで決まります。急がなければ、手数料を低めにして送ることもできます（承認まで時間がかかります）。</p>
+      </section>
+
+      <section class="card" aria-labelledby="g-after">
+        <h2 class="card-h" id="g-after">移したあと</h2>
+        <ul class="need">
+          <li>移し終えたら、札の鍵は使わないでください。贈り主も控えを持っている場合があります。</li>
+          <li>紋は記録として残り、かざせばいつでも見られます。</li>
+          <li>もう一度使うなら、新しい鍵で封じ直します（<a href="../setup/">封じの手順</a>）。タグをロックしている場合は書き換えられないため、その御守りは記念としてお持ちください。</li>
+        </ul>
+      </section>
+      <div class="nav">
+        <a class="btn wide ink" href="../m/#demo">かざした画面の見本を見る</a>
+        <a class="link-btn" href="../">稲妻守のページへ</a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="foot">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B53A1D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.6-7 10-4-1.4-7-5.4-7-10V6z"/></svg>
+    <p>このサイトが秘密鍵や12語を尋ねることはありません</p>
+  </footer>
+</div>
+<script type="module" src="../assets/js/guide.js"></script>
+</body>
+</html>

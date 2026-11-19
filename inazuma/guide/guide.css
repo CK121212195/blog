@@ -1,0 +1,10 @@
+/* 移し方の手順（封じの手順の見た目を使う） */
+.gd { padding-bottom: 8px; }
+.warn-box { display: flex; gap: 12px; align-items: flex-start; padding: 16px; border-radius: 20px; border: 1.5px solid var(--ver); background: #fbeee6; color: var(--ver-ink); }
+.warn-box svg { flex: 0 0 auto; margin-top: 2px; }
+.warn-box strong { display: block; font-size: 15px; line-height: 1.6; color: var(--ink); }
+.warn-box p { margin: 6px 0 0; font-size: 13.5px; line-height: 1.8; color: var(--ink-2); }
+.card .p { margin: 0; font-size: 14px; line-height: 1.85; color: var(--ink-2); }
+.card a { color: var(--ver-ink); }
+/* 読みものなので、下のボタンは追いかけない */
+.gd .nav { position: static; margin: 4px 0 0; padding: 4px 0 8px; background: none; }

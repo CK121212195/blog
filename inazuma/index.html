@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="theme-color" content="#101416">
+<meta name="description" content="稲妻守（いなずままもり）は、NFCを内蔵したビットコインの御守り。鍵をつくるのも、封をするのも、あなた自身。かざすと、入れたブロックから描かれた、その御守りだけの紋が現れます。">
+<title>稲妻守 ── かざして確かめる、ビットコインの御守り</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700;800&amp;family=Noto+Sans+JP:wght@400;500;700&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="landing.css">
+</head>
+<body class="lp">
+
+<header class="lp-top bg-night">
+  <a class="brand" href="./"><i aria-hidden="true"></i>稲妻守</a>
+  <nav class="lp-nav" aria-label="ページ内">
+    <a href="#raimon">紋</a>
+    <a href="#kit">キット</a>
+    <a href="#faq">質問</a>
+    <a class="lp-nav-cta" href="setup/">封じの手順</a>
+  </nav>
+</header>
+
+<main>
+  <!-- かざして確かめる -->
+  <section class="hero bg-night" aria-labelledby="hero-h">
+    <div class="wrap hero-in">
+      <div class="hero-text">
+        <p class="kicker">かざして確かめる、ビットコインの御守り</p>
+        <h1 id="hero-h" class="hero-h">稲妻守<span class="ruby">いなずままもり</span></h1>
+        <p class="hero-tag"><span class="ph">封じているあいだは、雷雲。</span><span class="ph">動かすと、稲妻になる。</span></p>
+        <p class="hero-lead">鍵をつくるのも、封をするのも、あなた自身。かざすたびに、入れたブロックから描かれた、その御守りだけの紋が現れます。</p>
+        <div class="hero-acts">
+          <a class="btn" href="#kit">キットを見る</a>
+          <a class="btn ghost-dark" href="m/#demo">かざした画面の見本</a>
+        </div>
+      </div>
+      <figure class="phone" aria-label="御守りをかざしたときの画面の見本">
+        <div class="phone-in">
+          <div class="ph-top"><span class="ph-brand"><i aria-hidden="true"></i>稲妻守</span><span class="tchip s-sealed" data-chip><span class="t">保管中</span></span></div>
+          <div class="stage ph-stage" data-stage="hero" aria-hidden="true">
+            <span class="halo" data-halo></span>
+            <div class="em"></div><div class="em"></div>
+          </div>
+          <p class="ph-title" data-title>雷雲</p>
+          <p class="ph-desc" data-desc>この御守りには、雷が封じられています</p>
+          <p class="ph-amt"><b>10,000</b> sats</p>
+        </div>
+        <figcaption>かざした画面の見本（金額は架空）</figcaption>
+      </figure>
+    </div>
+    <div class="wrap flip-row">
+      <button type="button" class="flip press" data-flip aria-pressed="false">
+        <span class="flip-dot" aria-hidden="true"></span><span data-flip-text>動かしてみる（見本）</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- 雷紋に、稲妻を刻む -->
+  <section class="sec bg-night-2" id="raimon" aria-labelledby="raimon-h">
+    <div class="wrap two">
+      <div class="big">
+        <div class="stage big-stage" data-stage="big" aria-hidden="true">
+          <span class="halo" data-halo></span>
+          <div class="em"></div><div class="em"></div>
+        </div>
+        <button type="button" class="flip press" data-flip aria-pressed="false">
+          <span class="flip-dot" aria-hidden="true"></span><span data-flip-text>動かしてみる（見本）</span>
+        </button>
+      </div>
+      <div>
+        <p class="kicker">ふたつの姿</p>
+        <h2 class="sec-h" id="raimon-h"><span class="ph">雷紋に、</span><span class="ph">稲妻を刻む</span></h2>
+        <p class="sec-lead">保管しているあいだは、円い銀の「雷雲」。丸い渦が二十四、一本の線でつながり、中心に三つ巴。中のsatsを動かすと、同じ二十四の渦が角ばった雷文に変わり、六角の朱金の「稲妻」になります。</p>
+        <dl class="pairs" data-pairs>
+          <div><dt>輪郭</dt><dd><span class="a">円</span><i aria-hidden="true">→</i><span class="b">六角</span></dd></div>
+          <div><dt>色</dt><dd><span class="a">銀</span><i aria-hidden="true">→</i><span class="b">朱と金</span></dd></div>
+          <div><dt>渦</dt><dd><span class="a">雲文</span><i aria-hidden="true">→</i><span class="b">雷文</span></dd></div>
+          <div><dt>中心</dt><dd><span class="a">三つ巴</span><i aria-hidden="true">→</i><span class="b">稲妻</span></dd></div>
+        </dl>
+        <p class="fine">紋は見本です（実在のブロック #840,000・#905,900 から描画）。切り替えは見た目だけで、お金は動きません。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 細部まで -->
+  <section class="sec bg-night" aria-labelledby="detail-h">
+    <div class="wrap">
+      <p class="kicker">ブロックから描く</p>
+      <h2 class="sec-h" id="detail-h"><span class="ph">細部まで、</span><span class="ph">そのブロックだけ</span></h2>
+      <div class="closeups">
+        <figure class="cu"><div class="cu-win" data-cu="bolt" aria-hidden="true"></div><figcaption><strong>稲妻の中の雷文</strong><span>稲妻の形と中の迷路は、移動が承認されたブロックで決まります。</span></figcaption></figure>
+        <figure class="cu"><div class="cu-win" data-cu="hash" aria-hidden="true"></div><figcaption><strong>ブロックハッシュの環</strong><span>入金が承認されたブロックのハッシュを、巴のまわりに刻みます。</span></figcaption></figure>
+        <figure class="cu"><div class="cu-win" data-cu="rim" aria-hidden="true"></div><figcaption><strong>縁の刻印</strong><span>「雷は雲に宿る」と、封じたブロックの番号と日付。</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 三つの約束 -->
+  <section class="sec bg-washi" aria-labelledby="promise-h">
+    <div class="wrap">
+      <p class="kicker ink">三つの約束</p>
+      <h2 class="sec-h" id="promise-h"><span class="ph">鍵は、</span><span class="ph">あなたの手元だけ</span></h2>
+      <div class="cards">
+        <article class="pc">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.6-7 10-4-1.4-7-5.4-7-10V6z"/></svg>
+          <h3>鍵を受け取りません</h3>
+          <p>販売者もサイトも、秘密鍵や12語を受け取りません。サイトに入力するのは、公開の受取アドレスだけです。</p>
+        </article>
+        <article class="pc">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8.5a8 8 0 0 1 0 7"/><path d="M9.5 6.5a12 12 0 0 1 0 11"/><path d="M13 4.5a16 16 0 0 1 0 15"/><circle cx="17.5" cy="12" r="1.2"/></svg>
+          <h3>銀帯をはがさずに、確かめる</h3>
+          <p>スマホをかざすと、中の残高と、その御守りだけの紋が開きます。</p>
+        </article>
+        <article class="pc">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16"/><path d="M12 4v16"/><circle cx="12" cy="12" r="8.5"/></svg>
+          <h3>サイトが無くなっても</h3>
+          <p>タグのURLにアドレスがそのまま入っています。どのブロックエクスプローラーでも確かめられ、satsを動かすのにこのサイトは要りません。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- キットの中身 -->
+  <section class="sec bg-paper" id="kit" aria-labelledby="kit-h">
+    <div class="wrap two kit">
+      <figure class="kit-img"><img src="assets/kit.jpg" width="1400" height="933" alt="稲妻守の御守り。表は麻の葉と稲妻、背面の継ぎ目に銀帯、引き出しには稲妻の札" loading="lazy" decoding="async"></figure>
+      <div>
+        <p class="kicker ink">キットの中身</p>
+        <h2 class="sec-h" id="kit-h"><span class="ph">残高ゼロ、</span><span class="ph">未封印で届きます</span></h2>
+        <ul class="kit-list">
+          <li><strong>空のNFCタグを内蔵した御守り</strong><span>3Dプリントの本体。背面の引き出しに札を納めます。</span></li>
+          <li><strong>二つ折りの白紙の札</strong><span>鍵を記して、引き出しに納める</span></li>
+          <li><strong>台紙に付いたままの銀帯</strong><span>50 × 15 mm。最後に、あなたの手で貼る</span></li>
+        </ul>
+        <div class="buy">
+          <p class="buy-l">価格・販売ページ</p>
+          <p class="buy-v">準備中です</p>
+        </div>
+        <p class="fine ink">届くのは残高ゼロのキットです。satsを入れるのも、封をするのも購入した方です。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 五つの工程 -->
+  <section class="sec bg-washi" aria-labelledby="steps-h">
+    <div class="wrap">
+      <p class="kicker ink">届いてから</p>
+      <h2 class="sec-h" id="steps-h"><span class="ph">仕上げる、</span><span class="ph">五つの工程</span></h2>
+      <ol class="steps">
+        <li><b>01</b><strong>鍵をつくり、札に書く</strong><span>自分のウォレットで、この御守り専用に</span></li>
+        <li><b>02</b><strong>札を確かめる</strong><span>書いた札から、同じアドレスになるか</span></li>
+        <li><b>03</b><strong>アドレスを照合</strong><span>4文字ずつ、指で確かめる</span></li>
+        <li><b>04</b><strong>NFCに書き込む</strong><span>かざした先のページを、タグに</span></li>
+        <li><b>05</b><strong>銀帯で封をする</strong><span>最後のひと手間は、あなたの手で</span></li>
+      </ol>
+      <div class="steps-cta"><a class="btn ink" href="setup/">封じの手順を開く</a></div>
+    </div>
+  </section>
+
+  <!-- よくある質問 -->
+  <section class="sec bg-paper" id="faq" aria-labelledby="faq-h">
+    <div class="wrap narrow">
+      <p class="kicker ink">よくある質問</p>
+      <h2 class="sec-h" id="faq-h">気になること</h2>
+      <div class="faq">
+        <details name="faq" open><summary>ライトニングのsatsですか？</summary><div><p>中身はオンチェーンのビットコインです。ライトニングのウォレットからでも、オンチェーン送金に対応していれば入れられます。</p></div></details>
+        <details name="faq"><summary>いくら入れればいいですか？</summary><div><p>額は自由です。ただ、あとで移すときにオンチェーンの手数料がかかるため、少額だと手数料の割合が大きくなります。</p></div></details>
+        <details name="faq"><summary>国内の取引所から入金できますか？</summary><div><p>多くの場合できます。自分で管理するウォレット宛ての送金になるため、取引所によっては、送付先の持ち主の情報（本人かどうか・氏名など）の入力や登録を求められます。</p></div></details>
+        <details name="faq"><summary>iPhoneでも使えますか？</summary><div><p>かざして見るのは、NFCを読めるスマホならiPhoneでもAndroidでもできます。NFCへの書き込みは、AndroidはこのサイトのChromeから、iPhoneは書き込み用のアプリで行います。</p></div></details>
+        <details name="faq"><summary>札をなくしたら？</summary><div><p>札の12語や秘密鍵がなければ、だれも中のsatsを動かせません。販売者やこのサイトが取り戻すこともできません。札は大切に保管してください。</p></div></details>
+        <details name="faq"><summary>このサイトが無くなったら？</summary><div><p>タグに書いたURLの中にアドレスが入っているので、NFC読み取りアプリでURLを見れば、どのブロックエクスプローラーでも確かめられます。中のsatsを動かすのに、このサイトは要りません。</p></div></details>
+        <details name="faq"><summary>贈った相手が中身を動かしたら？</summary><div><p>承認されると紋が「稲妻」に変わり、移動したブロックが記録として残ります。贈り主も鍵の控えを持てるため、受け取った方が自分だけで管理したいときは、開けて移すことをおすすめしています。</p></div></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="lp-foot bg-night">
+  <div class="wrap foot-in">
+    <p class="foot-brand"><i aria-hidden="true"></i>稲妻守</p>
+    <ul class="foot-links">
+      <li><a href="setup/">封じの手順</a></li>
+      <li><a href="m/#demo">かざした画面の見本</a></li>
+      <li><a href="guide/">移し方の手順</a></li>
+    </ul>
+    <p class="foot-note">残高の表示：mempool.space の公開データ（つながらないときは blockstream.info）<br>販売：準備中</p>
+    <p class="foot-safe"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E9C77E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.6-7 10-4-1.4-7-5.4-7-10V6z"/></svg>このサイトが秘密鍵や12語を尋ねることはありません</p>
+  </div>
+</footer>
+
+<script type="module" src="assets/js/landing.js"></script>
+</body>
+</html>
