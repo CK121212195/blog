@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src https://mempool.space https://blockstream.info; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="theme-color" content="#030507">
+<meta name="description" content="INFINITY ── ビットコインを封じる物理のコイン。ネットワークに届くなら、宇宙のどこからでも。かざすと、その一枚のコックピットが開きます。">
+<title>INFINITY ── ネットワークに届くなら、宇宙のどこからでも</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Zen+Kaku+Gothic+New:wght@400;500;700;900&amp;display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="landing.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="./" aria-label="INFINITY トップへ"><svg viewBox="0 0 64 32" aria-hidden="true"><path d="M32 16c-6-8-10-11-16-11a11 11 0 0 0 0 22c6 0 10-3 16-11zm0 0c6 8 10 11 16 11a11 11 0 0 0 0-22c-6 0-10 3-16 11z"/><circle cx="16" cy="16" r="4.2"/><circle cx="48" cy="16" r="4.2"/></svg><span>INFINITY</span></a>
+  <nav class="nav" aria-label="ページ内">
+    <a href="#artifact">コイン</a>
+    <a href="#states">紋</a>
+    <a href="#cockpit">コックピット</a>
+    <a href="#faq">質問</a>
+    <a class="nav-cta" href="setup/">打ち上げの手順</a>
+  </nav>
+</header>
+
+<main>
+  <!-- 特異点 -->
+  <section class="hero" aria-labelledby="hero-h">
+    <canvas class="hero-gl" id="gl" aria-hidden="true"></canvas>
+    <div class="hero-fallback" id="gl-fallback" aria-hidden="true" hidden></div>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hud-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="hero-top" aria-hidden="true">
+      <span class="label dim">INFINITY CORE · v0.1</span>
+      <span class="label sig link-state" id="link-state"><b class="led"></b><span>NODE LINK · 接続中</span></span>
+    </div>
+    <div class="hero-in">
+      <p class="label kicker">PHYSICAL BITCOIN · NON-CUSTODIAL · DECENTRALIZED</p>
+      <h1 class="hero-h" id="hero-h">INFINITY</h1>
+      <p class="hero-tag"><span class="ph">ネットワークに届くなら、</span><span class="ph">宇宙のどこからでも。</span></p>
+      <p class="hero-lead">ビットコインを封じる、物理のコイン。かざせば、その一枚のコックピットが開きます。</p>
+      <div class="hero-acts">
+        <a class="btn primary" href="m/#demo">コックピットを見る</a>
+        <a class="btn" href="setup/">打ち上げの手順</a>
+      </div>
+    </div>
+    <dl class="telemetry" aria-label="ビットコインのネットワークの、いまの状態">
+      <div><dt>BLOCK</dt><dd class="num" id="t-height">———</dd></div>
+      <div><dt>ELAPSED</dt><dd class="num" id="t-age">——</dd></div>
+      <div class="t-hash"><dt>HASH</dt><dd class="num" id="t-hash">————————</dd></div>
+      <div class="t-src"><dt>SOURCE</dt><dd class="num" id="t-src">——</dd></div>
+    </dl>
+    <a class="scroll-cue" href="#signal" aria-label="下へ"><span class="label dim">DESCEND</span><i aria-hidden="true"></i></a>
+  </section>
+
+  <!-- 01 信号 -->
+  <section class="sec" id="signal" aria-labelledby="signal-h">
+    <div class="wrap">
+      <p class="sec-no rv"><span class="label">01</span><span class="label dim">SIGNAL</span></p>
+      <h2 class="sec-h rv" id="signal-h"><span class="ph">地上の金庫は、</span><span class="ph">地上にしかない。</span></h2>
+      <p class="sec-lead rv">ビットコインの台帳は、世界中のノードが同じものを持っています。ネットワークに届く場所なら、地上でも、軌道の上でも、同じ台帳に追いつける。管理する誰かを、必要としません。</p>
+      <div class="facts">
+        <div class="fact brk rv"><p class="fact-v num">≈10<small>min</small></p><p class="fact-k">ひとつのブロックが刻まれる間隔のめやす</p></div>
+        <div class="fact brk rv"><p class="fact-v num">3–22<small>min</small></p><p class="fact-k">地球と火星のあいだを、光が片道で渡る時間</p></div>
+        <div class="fact brk rv"><p class="fact-v num">21,000,000</p><p class="fact-k">発行の上限。これより増えることはない</p></div>
+      </div>
+      <p class="sec-note rv">火星までの光の遅れは、長くてもブロック2つ分ほど。台帳は、ひとつです。</p>
+    </div>
+  </section>
+
+  <!-- 02 コイン -->
+  <section class="sec sec-artifact" id="artifact" aria-labelledby="artifact-h">
+    <div class="wrap two">
+      <div>
+        <p class="sec-no rv"><span class="label">02</span><span class="label dim">ARTIFACT</span></p>
+        <h2 class="sec-h rv" id="artifact-h">手のひらの、特異点。</h2>
+        <p class="sec-lead rv">コインは器です。中に封じるのは、あなたがつくった鍵。スマホをかざすと、中の残高と、入金が承認されたブロックから描かれた紋が現れます。</p>
+        <figure class="explode rv" aria-label="コインの構造の図。外殻、通信コイル、鍵の札、封印の4層">
+          <svg viewBox="0 0 420 300" aria-hidden="true">
+            <g class="ex-l ex-4"><ellipse cx="200" cy="248" rx="120" ry="30" class="ex-seal"/><text x="338" y="252">SEAL · 封印</text></g>
+            <g class="ex-l ex-3"><ellipse cx="200" cy="190" rx="112" ry="28" class="ex-slip"/><path d="M150 186h100M160 194h80" class="ex-lines"/><text x="330" y="194">KEY SLIP · 鍵の札</text></g>
+            <g class="ex-l ex-2"><ellipse cx="200" cy="130" rx="118" ry="29" class="ex-coil"/><ellipse cx="200" cy="130" rx="96" ry="23" class="ex-coil"/><ellipse cx="200" cy="130" rx="76" ry="18" class="ex-coil"/><text x="336" y="134">NFC COIL · 通信</text></g>
+            <g class="ex-l ex-1"><ellipse cx="200" cy="66" rx="124" ry="31" class="ex-shell"/><ellipse cx="200" cy="66" rx="40" ry="10" class="ex-core"/><text x="342" y="70">SHELL · 外殻</text></g>
+            <path d="M200 20V290" class="ex-axis"/>
+          </svg>
+        </figure>
+      </div>
+      <figure class="live-em rv">
+        <div class="live-stage" id="live-em" aria-hidden="true"></div>
+        <figcaption><span class="label" id="live-cap">BLOCK —</span><span>最新のブロックで描いた見本です。実際の紋は、あなたの入金が承認されたブロックで決まります。</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 03 ふたつの姿 -->
+  <section class="sec sec-states" id="states" aria-labelledby="states-h">
+    <div class="wrap two">
+      <div class="state-stage-wrap rv">
+        <div class="state-stage" id="state-stage" aria-hidden="true"><div class="em on"></div><div class="em"></div></div>
+        <button type="button" class="lever" id="lever" aria-pressed="false">
+          <span class="lever-track" aria-hidden="true"><span class="lever-knob"></span></span>
+          <span class="lever-t"><span class="label">SEALED</span><span class="label ice">TRANSCENDED</span></span>
+          <span class="sr-only">紋の姿を切り替える（見本）</span>
+        </button>
+      </div>
+      <div>
+        <p class="sec-no rv"><span class="label">03</span><span class="label dim">TWO STATES</span></p>
+        <h2 class="sec-h rv" id="states-h"><span class="ph">封じれば、特異点。</span><span class="ph">動かせば、四次元。</span></h2>
+        <p class="sec-lead rv">入金が承認されると、そのブロックから特異点の紋が描かれます。中身を動かすと、事象の地平線がほどけ、移動のブロックから超立方体が展開します。外の環は、封じたときのブロックのまま残ります。</p>
+        <dl class="pairs rv" id="pairs">
+          <div><dt>中心</dt><dd><span class="a">事象の地平線</span><i aria-hidden="true">→</i><span class="b">超立方体</span></dd></div>
+          <div><dt>色</dt><dd><span class="a">降着円盤の橙</span><i aria-hidden="true">→</i><span class="b">白藍の光</span></dd></div>
+          <div><dt>外の環</dt><dd><span class="a">入金のブロック</span><i aria-hidden="true">→</i><span class="b">入金＋移動</span></dd></div>
+          <div><dt>動き</dt><dd><span class="a">周回する光</span><i aria-hidden="true">→</i><span class="b">回る四次元</span></dd></div>
+        </dl>
+        <p class="fine rv">見本は実在のブロック #840,000・#905,900 から描いています。切り替えは見た目だけで、お金は動きません。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 コックピット -->
+  <section class="sec" id="cockpit" aria-labelledby="cockpit-h">
+    <div class="wrap two">
+      <div>
+        <p class="sec-no rv"><span class="label">04</span><span class="label dim">COCKPIT</span></p>
+        <h2 class="sec-h rv" id="cockpit-h"><span class="ph">かざすと、</span><span class="ph">コックピットが開く。</span></h2>
+        <p class="sec-lead rv">スマホをコインにかざすと、その一枚の計器盤が開きます。残高、封じたブロック、周回した日数。入金のQRも、移すときの手順も、ここから。</p>
+        <ul class="ctrls rv">
+          <li><b class="mono">FUND</b><span>入金用のQRを出す</span></li>
+          <li><b class="mono">VERIFY</b><span>公開データで確かめる</span></li>
+          <li><b class="mono">RETURN</b><span>自分のウォレットへ移す手順</span></li>
+          <li><b class="mono">CAPTURE</b><span>紋を画像で保存</span></li>
+        </ul>
+        <div class="rv"><a class="btn primary" href="m/#demo">見本のコックピットを開く</a></div>
+      </div>
+      <div class="mock rv" aria-hidden="true">
+        <div class="mock-in brk">
+          <div class="mock-top"><span class="label">INFINITY</span><span class="tchip"><span class="t">SEALED</span></span></div>
+          <div class="mock-em" id="mock-em"></div>
+          <p class="mock-title">特異点</p>
+          <dl class="mock-t">
+            <div><dt>BALANCE</dt><dd class="num">10,000 sats</dd></div>
+            <div><dt>SEALED</dt><dd class="num">#840,000</dd></div>
+            <div><dt>IN ORBIT</dt><dd class="num" id="mock-days">— DAYS</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 打ち上げ -->
+  <section class="sec sec-launch" id="launch" aria-labelledby="launch-h">
+    <div class="wrap">
+      <p class="sec-no rv"><span class="label">05</span><span class="label dim">LAUNCH SEQUENCE</span></p>
+      <h2 class="sec-h rv" id="launch-h"><span class="ph">打ち上げまで、</span><span class="ph">五つの工程。</span></h2>
+      <ol class="seq">
+        <li class="rv"><b class="num">T−5</b><strong>鍵をつくり、札に書く</strong><span>自分のウォレットで、このコイン専用に</span></li>
+        <li class="rv"><b class="num">T−4</b><strong>札を確かめる</strong><span>書いた札から、同じアドレスになるか</span></li>
+        <li class="rv"><b class="num">T−3</b><strong>座標を照合する</strong><span>受取アドレスを、4文字ずつ指で</span></li>
+        <li class="rv"><b class="num">T−2</b><strong>NFCに書き込む</strong><span>かざした先を、このコックピットに</span></li>
+        <li class="rv"><b class="num">T−1</b><strong>封印する</strong><span>最後のひと手間は、あなたの手で</span></li>
+        <li class="rv ignite"><b class="num">T−0</b><strong>点火</strong><span>入金が承認されると、紋が描かれる</span></li>
+      </ol>
+      <div class="center rv"><a class="btn primary" href="setup/">打ち上げの手順を開く</a></div>
+    </div>
+  </section>
+
+  <!-- 06 約束 -->
+  <section class="sec" aria-labelledby="protocol-h">
+    <div class="wrap">
+      <p class="sec-no rv"><span class="label">06</span><span class="label dim">PROTOCOL</span></p>
+      <h2 class="sec-h rv" id="protocol-h">鍵は、あなたの手元だけ。</h2>
+      <div class="cards">
+        <article class="card brk rv"><p class="label">01</p><h3>鍵を受け取りません</h3><p>販売者もサイトも、秘密鍵や12語を受け取りません。サイトに入れるのは、公開の受取アドレスだけです。</p></article>
+        <article class="card brk rv"><p class="label">02</p><h3>封を切らずに、確かめる</h3><p>スマホをかざすと、中の残高と、その一枚だけの紋が開きます。</p></article>
+        <article class="card brk rv"><p class="label">03</p><h3>サイトが消えても</h3><p>タグのURLにアドレスがそのまま入っています。どのブロックエクスプローラーでも確かめられ、中身を動かすのにこのサイトは要りません。</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 積荷 -->
+  <section class="sec" id="manifest" aria-labelledby="manifest-h">
+    <div class="wrap two">
+      <div>
+        <p class="sec-no rv"><span class="label">07</span><span class="label dim">MANIFEST</span></p>
+        <h2 class="sec-h rv" id="manifest-h"><span class="ph">残高ゼロ、</span><span class="ph">未封印で届きます。</span></h2>
+        <p class="sec-lead rv">届くのは、空の器です。satsを入れるのも、封をするのも、受け取ったあなた。自分で持っても、誰かに贈っても。</p>
+      </div>
+      <div class="manifest rv">
+        <ul class="mani">
+          <li><span class="num">01</span><strong>コイン本体</strong><span>空のNFCタグを内蔵</span></li>
+          <li><span class="num">02</span><strong>鍵を記す札</strong><span>白紙。あなたの手で書く</span></li>
+          <li><span class="num">03</span><strong>封印シール</strong><span>台紙のまま。最後に貼る</span></li>
+        </ul>
+        <div class="buy brk"><span class="label dim">PRICE / STORE</span><strong>準備中</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 質問 -->
+  <section class="sec" id="faq" aria-labelledby="faq-h">
+    <div class="wrap narrow">
+      <p class="sec-no rv"><span class="label">08</span><span class="label dim">FAQ</span></p>
+      <h2 class="sec-h rv" id="faq-h">気になること</h2>
+      <div class="faq">
+        <details name="faq" open><summary>ライトニングのsatsですか？</summary><div><p>中身はオンチェーンのビットコインです。ライトニングのウォレットからでも、オンチェーン送金に対応していれば入れられます。</p></div></details>
+        <details name="faq"><summary>いくら入れればいいですか？</summary><div><p>額は自由です。ただ、あとで移すときにオンチェーンの手数料がかかるため、少額だと手数料の割合が大きくなります。</p></div></details>
+        <details name="faq"><summary>国内の取引所から入金できますか？</summary><div><p>多くの場合できます。自分で管理するウォレット宛ての送金になるため、取引所によっては、送付先の持ち主の情報（本人かどうか・氏名など）の入力や登録を求められます。</p></div></details>
+        <details name="faq"><summary>iPhoneでも使えますか？</summary><div><p>かざして見るのは、NFCを読めるスマホならiPhoneでもAndroidでもできます。NFCへの書き込みは、AndroidはこのサイトのChromeから、iPhoneは書き込み用のアプリで行います。</p></div></details>
+        <details name="faq"><summary>札をなくしたら？</summary><div><p>札の12語や秘密鍵がなければ、だれも中のsatsを動かせません。販売者やこのサイトが取り戻すこともできません。札は大切に保管してください。</p></div></details>
+        <details name="faq"><summary>このサイトが無くなったら？</summary><div><p>タグに書いたURLの中にアドレスが入っているので、NFC読み取りアプリでURLを見れば、どのブロックエクスプローラーでも確かめられます。中のsatsを動かすのに、このサイトは要りません。</p></div></details>
+        <details name="faq"><summary>贈った相手が中身を動かしたら？</summary><div><p>承認されると紋が「超立方体」に変わり、移動したブロックが記録として残ります。贈り主も鍵の控えを持てるため、受け取った方が自分だけで管理したいときは、開けて移すことをおすすめしています。</p></div></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <p class="logo foot-logo"><svg viewBox="0 0 64 32" aria-hidden="true"><path d="M32 16c-6-8-10-11-16-11a11 11 0 0 0 0 22c6 0 10-3 16-11zm0 0c6 8 10 11 16 11a11 11 0 0 0 0-22c-6 0-10 3-16 11z"/><circle cx="16" cy="16" r="4.2"/><circle cx="48" cy="16" r="4.2"/></svg><span>INFINITY</span></p>
+    <ul class="foot-links">
+      <li><a href="setup/">打ち上げの手順</a></li>
+      <li><a href="m/#demo">見本のコックピット</a></li>
+      <li><a href="guide/">帰還の手順（移し方）</a></li>
+    </ul>
+    <p class="foot-note">ネットワークの表示：mempool.space の公開データ（つながらないときは blockstream.info）<br>販売：準備中</p>
+    <p class="foot-safe"><span class="led sig" aria-hidden="true"></span>このサイトが秘密鍵や12語を尋ねることはありません</p>
+  </div>
+</footer>
+
+<script type="module" src="assets/js/landing.js"></script>
+</body>
+</html>
