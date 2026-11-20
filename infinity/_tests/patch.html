@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../assets/app.css">
+<style>body{margin:0;background:#030507;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px}div{aspect-ratio:1}svg{width:100%;height:100%}</style></head>
+<body><div id="a"></div><div id="b"></div><div id="c"></div><div id="d"></div><div id="e"></div><div id="f"></div>
+<script type="module">
+import * as S from '../assets/js/singularity.js';
+const H840='0000000000000000000320283a032748cef8227873ff4872689bf23f1cda83a5', H905='00000000000000000001a931ea278526fe4f38e6cfabde3a252ee51536c27572';
+document.getElementById('a').innerHTML=S.sealed(H840,{id:'a',block:'840000',date:'2024.04.20'});
+document.getElementById('b').innerHTML=S.sealed(H840,{id:'b',block:'840000',date:'2024.04.20',name:'はるへ'});
+document.getElementById('c').innerHTML=S.released(H840,H905,{id:'c',block:'840000',date:'2024.04.20',moveBlock:'905900',moveDate:'2025.07.17'});
+document.getElementById('d').innerHTML=S.rumbling(H840,{id:'d',block:'840000',date:'2024.04.20'});
+document.getElementById('e').innerHTML=S.gathering({id:'e'});
+document.getElementById('f').innerHTML=S.sealed(H840,{id:'f',block:'840000',date:'2024.04.20',name:'ゆうとくんの十歳の誕生日に、未来へ届くように'});
+</script></body></html>

@@ -1,7 +1,8 @@
-// 特異点の紋 ── ブロックハッシュから描く（同じハッシュなら、いつ・どこで描いても同じ形）
+// ミッションパッチ ── ブロックハッシュから描く（同じハッシュなら、いつ・どこで描いても同じ形）
 //   sealed   … 降着円盤を抱えた特異点（入金が承認されたブロックで決まる）
 //   released … 展開した超立方体（外の環は入金のブロック、中心は移動のブロックで決まる）
 //   rumbling / gathering / empty … 途中の姿
+//   いちばん外側は、刺繍の記章のような帯。上にミッション名とブロック番号、下に名前（なければ状態）と日付
 const TAU = Math.PI * 2;
 const DEG = Math.PI / 180;
 const f1 = (n) => (Math.round(n * 10) / 10).toString();
@@ -163,6 +164,35 @@ function hashRingText(label, hash) {
 }
 const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]);
 
+const fmtH = (b) => { const n = Number(String(b || '').replace(/[^0-9]/g, '')); return Number.isFinite(n) && String(b || '').trim() !== '' ? n.toLocaleString('en-US') : '—'; };
+// 帯の文字の大きさ（長い名前は小さく。日本語は幅を広めに数える）
+function bandSize(t) {
+  let w = 0;
+  for (const ch of String(t)) w += /[⺀-鿿豈-﫿＀-￯]/.test(ch) ? 1.75 : 1;
+  return Math.max(10.5, Math.min(19, (19 * 42) / Math.max(42, w)));
+}
+// ── ミッションパッチの帯（刺繍の縁取り）
+function patchBand(id, o) {
+  const acc = o.alert ? '#FF5A3C' : o.cool ? ICE.line : o.dim ? '#8A99A5' : AMBER.line;
+  return `<g class="sg-band">
+    <defs><path id="${id}-bt" d="M-288 0A288 288 0 0 1 288 0"/><path id="${id}-bb" d="M-302 0A302 302 0 0 0 302 0"/></defs>
+    <circle r="295" fill="none" stroke="#06090c" stroke-width="40"/>
+    <circle r="295" fill="none" stroke="${acc}" stroke-opacity=".06" stroke-width="40"/>
+    <circle r="316" fill="none" stroke="${acc}" stroke-opacity=".85" stroke-width="2.2"/>
+    <circle r="311" fill="none" stroke="${acc}" stroke-opacity=".45" stroke-width="1.2" stroke-dasharray="3 4"/>
+    <circle r="279" fill="none" stroke="${acc}" stroke-opacity=".45" stroke-width="1.2" stroke-dasharray="3 4"/>
+    <circle r="275" fill="none" stroke="${acc}" stroke-opacity=".7" stroke-width="1.6"/>
+    <g font-family="Oxanium, 'Zen Kaku Gothic New', 'Noto Sans JP', system-ui, sans-serif" font-weight="600" fill="${acc}" text-anchor="middle">
+      <text font-size="${f1(bandSize(o.top))}" letter-spacing="4.5"><textPath href="#${id}-bt" xlink:href="#${id}-bt" startOffset="50%">${esc(o.top)}</textPath></text>
+      <text font-size="${f1(bandSize(o.bottom))}" letter-spacing="3.5"><textPath href="#${id}-bb" xlink:href="#${id}-bb" startOffset="50%">${esc(o.bottom)}</textPath></text>
+    </g>
+    <g fill="${acc}"><path d="M-295 -8l4.5 8-4.5 8-4.5-8z"/><path d="M295 -8l4.5 8-4.5 8-4.5-8z"/></g>
+  </g>`;
+}
+function wrap(o, cls, inner, bandOpt) {
+  return `${svgOpen(o, cls)}<g class="sg-core" transform="scale(.86)">${inner}</g>${patchBand(o.id || 'sg', bandOpt)}</svg>`;
+}
+
 // ── 光の輪：円盤の向こう側が重力で曲がり、影の上に厚く・下に薄く見える
 function halo(rh) {
   const a = rh * 1.34, b = rh * 1.37, cy = -rh * 0.12, ri = rh * 1.07;
@@ -214,11 +244,6 @@ function dust(d, count, rmin, rmax, color) {
   }
   return `<g class="sg-dust">${s}</g>`;
 }
-function label(lines, y, color) {
-  return `<g font-family="JetBrains Mono, IBM Plex Mono, ui-monospace, monospace" text-anchor="middle" fill="${color}">${lines
-    .map((l, i) => `<text y="${y + i * 15}" font-size="${i === 0 ? 10.5 : 9}" letter-spacing="${i === 0 ? 2.4 : 1.2}" fill-opacity="${i === 0 ? 0.92 : 0.6}">${esc(l)}</text>`)
-    .join('')}</g>`;
-}
 
 // ── 保管中：特異点
 export function sealed(hash, o = {}) {
@@ -228,8 +253,7 @@ export function sealed(hash, o = {}) {
   const rumble = !!o.rumbling;
   const t = tesseractPaths({ angles: d.tess, d4: 2.8, tilt: -18, yaw: 30 }, 0, d.rh * 0.22);
   const ring = hashRingText(`INFINITY · SEALED AT BLOCK ${o.block || '?'} · ${o.date || ''}`, hash);
-  return `${svgOpen(o, 'sg-sealed' + (rumble ? ' sg-rumbling' : ''))}
-  <defs>
+  const inner = `<defs>
     ${dopplerGrad(d, id, C)}
     <linearGradient id="${id}-halo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C[1]}" stop-opacity=".95"/><stop offset=".35" stop-color="${C[2]}" stop-opacity=".85"/><stop offset=".7" stop-color="${C[3]}" stop-opacity=".6"/><stop offset="1" stop-color="${C[3]}" stop-opacity=".25"/></linearGradient>
     <radialGradient id="${id}-glow"><stop offset=".45" stop-color="${C[2]}" stop-opacity="0"/><stop offset=".62" stop-color="${C[2]}" stop-opacity=".28"/><stop offset="1" stop-color="${C[3]}" stop-opacity="0"/></radialGradient>
@@ -247,9 +271,12 @@ export function sealed(hash, o = {}) {
   <g clip-path="url(#${id}-hole)" fill="none" stroke="${C[2]}" stroke-opacity=".13" stroke-width="1"><path d="${t.outer}${t.inner}${t.links}"/></g>
   <circle class="sg-photon" r="${f1(d.rh * 1.03)}" fill="none" stroke="${C[0]}" stroke-width="2" stroke-opacity=".95"/>
   ${diskHalf(d, id, true, { fracture: rumble })}
-  ${rumble ? `<g class="sg-warn" fill="none" stroke="#FF5A3C" stroke-width="2.4" stroke-dasharray="14 10" stroke-opacity=".85"><circle r="226"/></g>` : ''}
-  ${label(['SINGULARITY', `#${o.block || '—'}  ${o.date || ''}`], 196, C[1])}
-</svg>`;
+  ${rumble ? `<g class="sg-warn" fill="none" stroke="#FF5A3C" stroke-width="2.4" stroke-dasharray="14 10" stroke-opacity=".85"><circle r="226"/></g>` : ''}`;
+  return wrap(o, 'sg-sealed' + (rumble ? ' sg-rumbling' : ''), inner, {
+    top: `INFINITY MISSION · #${fmtH(o.block)}`,
+    bottom: rumble ? 'CRITICAL · TRANSFER PENDING' : `${o.name ? o.name : 'SINGULARITY'} · ${o.date || '—'}`,
+    alert: rumble,
+  });
 }
 
 export function rumbling(hash, o = {}) {
@@ -277,8 +304,7 @@ export function released(depositHash, moveHash, o = {}) {
     frames += `M${f1(-s)} ${f1(-s)}H${f1(s)}V${f1(s)}H${f1(-s)}Z`;
   }
   const pts = t.points.map((p) => `<circle cx="${f1(p[0])}" cy="${f1(p[1])}" r="${p[2] > 0 ? 2.6 : 1.8}"/>`).join('');
-  return `${svgOpen(o, 'sg-released')}
-  <defs>
+  const inner = `<defs>
     ${dopplerGrad(d, id, ['#E8F6FF', '#B9E3FF', '#7FBCE6', '#3E6E92', '#1B3346'])}
     <radialGradient id="${id}-core"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".18" stop-color="#E6F7FF" stop-opacity=".95"/><stop offset=".5" stop-color="#7FC8FF" stop-opacity=".22"/><stop offset="1" stop-color="#7FC8FF" stop-opacity="0"/></radialGradient>
     <linearGradient id="${id}-jet" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E6F7FF" stop-opacity="0"/><stop offset=".5" stop-color="#FFFFFF" stop-opacity=".95"/><stop offset="1" stop-color="#E6F7FF" stop-opacity="0"/></linearGradient>
@@ -301,9 +327,12 @@ export function released(depositHash, moveHash, o = {}) {
     <path class="te-o" d="${t.outer}" stroke="#F2FBFF" stroke-width="1.8"/>
     <g class="te-p" fill="#F2FBFF">${pts}</g>
   </g>
-  <circle r="5" fill="#FFFFFF"/>
-  ${label(['TRANSCENDED', `#${o.moveBlock || '—'}  ${o.moveDate || ''}`], 218, '#CFEFFF')}
-</svg>`;
+  <circle r="5" fill="#FFFFFF"/>`;
+  return wrap(o, 'sg-released', inner, {
+    top: `INFINITY MISSION · #${fmtH(o.block)} → #${fmtH(o.moveBlock)}`,
+    bottom: `${o.name ? o.name : 'TRANSCENDED'} · ${o.moveDate || '—'}`,
+    cool: true,
+  });
 }
 
 // ── 承認待ちの入金：塵が集まってくる
@@ -318,23 +347,19 @@ export function gathering(o = {}) {
       s += `<circle cx="${f1(Math.cos(a) * rr)}" cy="${f1(Math.sin(a) * rr * 0.62)}" r="${f2(0.7 + u * 1.6)}" fill-opacity="${f2(0.15 + u * 0.7)}"/>`;
     }
   }
-  return `${svgOpen(o, 'sg-gathering')}
-  ${bezel('g', { bearing: 0, dim: true })}
+  const inner = `${bezel('g', { bearing: 0, dim: true })}
   <g class="sg-spiral" fill="#FFD08A">${s}</g>
-  <circle r="36" fill="none" stroke="#FFB04A" stroke-opacity=".5" stroke-width="1.2" stroke-dasharray="3 5"/>
-  ${label(['INBOUND', 'AWAITING CONFIRMATION'], 196, '#FFD08A')}
-</svg>`;
+  <circle r="36" fill="none" stroke="#FFB04A" stroke-opacity=".5" stroke-width="1.2" stroke-dasharray="3 5"/>`;
+  return wrap(o, 'sg-gathering', inner, { top: 'INFINITY MISSION · INBOUND', bottom: o.name ? `${o.name} · AWAITING` : 'AWAITING CONFIRMATION' });
 }
 
 // ── まだ空：信号なし
 export function empty(o = {}) {
   let grid = '';
   for (const r of [60, 120, 180]) grid += `<circle r="${r}" fill="none" stroke="rgba(160,190,210,.12)" stroke-dasharray="2 6"/>`;
-  return `${svgOpen(o, 'sg-empty')}
-  ${bezel('e', { bearing: 0, dim: true })}
+  const inner = `${bezel('e', { bearing: 0, dim: true })}
   ${grid}
   <path d="M-40 0H-12M12 0H40M0 -40V-12M0 12V40" stroke="rgba(255,176,74,.55)" stroke-width="1.4"/>
-  <circle r="4" fill="none" stroke="rgba(255,176,74,.7)"/>
-  ${label(['NO SIGNAL', 'STANDBY'], 92, '#8A99A5')}
-</svg>`;
+  <circle r="4" fill="none" stroke="rgba(255,176,74,.7)"/>`;
+  return wrap(o, 'sg-empty', inner, { top: 'INFINITY MISSION · STANDBY', bottom: o.name ? `${o.name} · NO SIGNAL` : 'NO SIGNAL', dim: true });
 }

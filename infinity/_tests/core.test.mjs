@@ -5,6 +5,11 @@ import { loadOmamori, estimateSweepVbytes } from '../assets/js/chain.js';
 import * as SG from '../assets/js/singularity.js';
 import { omamoriBase, omamoriUrl, ndefBytes, nameRoom, TAG_BYTES } from '../assets/js/site.js';
 import { decodeUrlBytes, sameUrl, errorText } from '../assets/js/nfc.js';
+import { convert, parseNum, fmt, fetchPrices } from '../assets/js/fx.js';
+import { fetchBlocks } from '../assets/js/tip.js';
+import { lidSVG, caseScene, ORDER } from '../assets/js/lids.js';
+import { layoutFor } from '../assets/js/hero.js';
+import { view } from '../assets/js/space.js';
 
 let pass = 0;
 const t = async (name, fn) => { await fn(); pass++; console.log('ok', name); };
@@ -189,6 +194,105 @@ await t('NFC から読んだ URL を戻す・くらべる', async () => {
   assert.equal(sameUrl('', ''), false);
   assert.ok(errorText({ name: 'TimeoutError' }).includes('かざされません'));
   assert.ok(errorText({ name: 'Weird' }).includes('Weird'));
+});
+
+// ── 価格の換算（1ドル＝何BTC＝何sats＝何円）
+const PX = { usd: 100000, jpy: 15000000 };
+await t('換算：1ドル → BTC・sats・円', async () => {
+  const v = convert('usd', 1, PX);
+  assert.equal(fmt('btc', v.btc), '0.00001');
+  assert.equal(fmt('sats', v.sats), '1,000');
+  assert.equal(fmt('jpy', v.jpy), '150');
+  assert.equal(fmt('usd', convert('sats', 1000, PX).usd), '1.00');
+  assert.equal(fmt('jpy', convert('btc', 1, PX).jpy), '15,000,000');
+});
+await t('換算：価格が取れないときは BTC と sats だけ', async () => {
+  const v = convert('btc', 0.5, null);
+  assert.equal(v.sats, 50000000);
+  assert.ok(Number.isNaN(v.usd) && Number.isNaN(v.jpy));
+  assert.equal(fmt('usd', v.usd), '—');
+});
+await t('入力の読み取り（全角・カンマ・記号）', async () => {
+  assert.equal(parseNum('１，２３４．５'), 1234.5);
+  assert.equal(parseNum('¥15,000'), 15000);
+  assert.equal(parseNum('$ 1.25'), 1.25);
+  assert.equal(parseNum('2100 sats'), 2100);
+  assert.equal(parseNum('abc'), null);
+  assert.equal(parseNum(''), null);
+  assert.equal(parseNum('1.2.3'), null);
+});
+await t('価格の取得：mempool.space が落ちたら CoinGecko', async () => {
+  const real = globalThis.fetch;
+  const seen = [];
+  globalThis.fetch = async (u) => {
+    seen.push(String(u));
+    if (String(u).includes('mempool.space')) return { ok: false, json: async () => ({}) };
+    return { ok: true, json: async () => ({ bitcoin: { usd: 90000, jpy: 14000000, last_updated_at: 1 } }) };
+  };
+  try {
+    const p = await fetchPrices({ fresh: true });
+    assert.deepEqual([p.usd, p.jpy, p.source], [90000, 14000000, 'CoinGecko']);
+    assert.ok(seen[0].includes('mempool.space/api/v1/prices'));
+  } finally { globalThis.fetch = real; }
+});
+await t('最新ブロックの取得：高い順にそろえ、形の悪いものは捨てる', async () => {
+  const real = globalThis.fetch;
+  const id = (n) => '0'.repeat(20) + String(n).padStart(44, '7');
+  globalThis.fetch = async () => ({ ok: true, json: async () => [{ id: id(1), height: 10, timestamp: 1, tx_count: 2, weight: 3, size: 4 }, { id: 'bad', height: 12 }, { id: id(2), height: 11, timestamp: 2 }] });
+  try {
+    const d = await fetchBlocks({ fresh: true });
+    assert.deepEqual(d.blocks.map((b) => b.height), [11, 10]);
+    assert.equal(d.source, 'mempool.space');
+  } finally { globalThis.fetch = real; }
+});
+
+// ── ミッションパッチの帯
+await t('パッチの帯：ミッション名・ブロック番号・名前・日付', async () => {
+  const s = SG.sealed(H840, { id: 't1', block: '840000', date: '2024.04.20', name: 'はるへ' });
+  assert.ok(s.includes('INFINITY MISSION · #840,000'));
+  assert.ok(s.includes('はるへ · 2024.04.20'));
+  const r = SG.released(H840, H905, { id: 't2', block: '840000', moveBlock: '905900', moveDate: '2025.07.17' });
+  assert.ok(r.includes('#840,000 → #905,900') && r.includes('TRANSCENDED · 2025.07.17'));
+  assert.ok(SG.rumbling(H840, { id: 't3', block: '840000' }).includes('CRITICAL · TRANSFER PENDING'));
+});
+await t('パッチの帯：長い名前は文字を小さく、記号はエスケープ', async () => {
+  const size = (svg) => Number((svg.match(/font-size="([\d.]+)"[^>]*><textPath[^>]*-bb/) || [])[1]);
+  const short = SG.sealed(H840, { id: 'a', block: '1', date: 'x', name: 'A' });
+  const long = SG.sealed(H840, { id: 'b', block: '1', date: 'x', name: 'あ'.repeat(40) });
+  assert.ok(size(long) < size(short));
+  assert.ok(SG.sealed(H840, { id: 'c', block: '1', name: '<b>&' }).includes('&lt;b&gt;&amp;'));
+});
+
+// ── 蓋の絵柄と分解図
+await t('4つの絵柄と分解図が描ける', async () => {
+  assert.deepEqual(ORDER, ['a', 'b', 'c', 'd']);
+  for (const k of ORDER) {
+    const s = lidSVG(k, { id: 'x' + k });
+    assert.ok(s.startsWith('<svg') && s.includes('clip-path'));
+  }
+  const c = caseScene('d', { id: 'z' });
+  for (const cls of ['cs-lid', 'cs-tag', 'cs-slip', 'cs-body', 'cs-seal']) assert.ok(c.includes(cls), cls);
+  assert.ok(lidSVG('d').includes('二'));
+});
+
+// ── 操縦席の構図（画面の点 ⇄ 世界の向き がずれない）
+await t('構図：画面の形ごとの配置', async () => {
+  assert.equal(layoutFor(1440, 900).mode, 'wide');
+  assert.equal(layoutFor(820, 1180).mode, 'mid');
+  assert.equal(layoutFor(390, 844).mode, 'tall');
+  const L = layoutFor(1440, 900);
+  assert.ok(L.pitch > 0 && L.pitch < 0.5);
+});
+await t('構図：向き → 画面 → 向き が一致（取引の弧が地球に乗る）', async () => {
+  const P = { shift: [0.01, -0.004], roll: 0.03, F: 1.05, pitch: 0.23 };
+  for (const uv of [[0, 0], [0.3, 0.12], [-0.6, -0.4]]) {
+    const d = view.dir(uv, P);
+    const back = view.project([d[0] * 5, d[1] * 5, d[2] * 5], P);
+    assert.ok(Math.abs(back[0] - uv[0]) < 1e-9 && Math.abs(back[1] - uv[1]) < 1e-9, String(uv));
+  }
+});
+await t('NFC のエラー文（日本語の画面では「蓋」と書く）', async () => {
+  assert.ok(errorText({ name: 'TimeoutError' }).includes('蓋'));
 });
 
 console.log(`\n${pass} 件すべて通りました`);

@@ -1,10 +1,15 @@
-// INFINITY ── コックピット（コインをかざした先）
-// URL の #<アドレス>&n=<名前> を読み、公開データから状態を判定して、紋と計器を出す。鍵は一切扱わない。
+// INFINITY ── コックピット（HODLケースの蓋にかざした先）
+// URL の #<アドレス>&n=<名前> を読み、公開データから状態を判定して、ミッションパッチと計器を出す。鍵は一切扱わない。
 import { $, $$, b64urlDecodeUtf8, fmtSats, fmtDateDot, daysBetweenJST, group4, store, prefersReducedMotion } from './util.js';
 import { validateAddress } from './address.js';
 import { loadOmamori, loadFeeRate, estimateSweepVbytes, NETS } from './chain.js';
 import { bip21, qrSvg } from './qr.js';
 import * as S from './singularity.js';
+import { L, onLang, mountLangToggle } from './i18n.js';
+import { watchBlocks } from './tip.js';
+import { mountRail } from './rail.js';
+import { fetchPrices, convert, fmt } from './fx.js';
+import { sweep, initTilt } from './motion.js';
 
 const reduce = prefersReducedMotion();
 const H840 = '0000000000000000000320283a032748cef8227873ff4872689bf23f1cda83a5';
@@ -13,17 +18,20 @@ const T840 = 1713571767;
 const T905 = 1752727208;
 const now = () => Math.floor(Date.now() / 1000);
 
-const COPY = {
-  loading: { en: 'ESTABLISHING LINK', title: '接続中', desc: 'ネットワークに問い合わせています', chip: 'LINK' },
-  empty: { en: 'STANDBY · NO PAYLOAD', title: '静寂', desc: 'まだ何も封じられていません。入金が承認されると、そのブロックから紋が描かれます。', chip: 'STANDBY' },
-  gathering: { en: 'INBOUND · AWAITING CONFIRMATION', title: '接近', desc: '入金を確かめています。承認されると、紋が描かれます。', chip: 'INBOUND' },
-  sealed: { en: 'SINGULARITY · SEALED', title: '特異点', desc: 'このコインには、価値が封じられています。', chip: 'SEALED' },
-  rumbling: { en: 'CRITICAL · TRANSFER PENDING', title: '臨界', desc: '中身が動き始めています。承認を待っています。', chip: 'CRITICAL' },
-  released: { en: 'TRANSCENDED · RELEASED', title: '超越', desc: '封は解かれ、価値は外の宇宙へ。', chip: 'RELEASED' },
-  error: { en: 'NO SIGNAL', title: '', desc: '', chip: 'NO SIGNAL' },
-};
+mountLangToggle();
 
-// ── URL を読む
+const COPY = {
+  loading: { en: 'ESTABLISHING LINK', title: ['接続中', 'Linking'], desc: ['ネットワークに問い合わせています', 'Querying the network'], chip: 'LINK' },
+  empty: { en: 'STANDBY · NO PAYLOAD', title: ['静寂', 'Standby'], desc: ['まだ何も封じられていません。入金が承認されると、そのブロックからミッションパッチが描かれます。', 'Nothing is sealed yet. When a deposit confirms, your mission patch is drawn from that block.'], chip: 'STANDBY' },
+  gathering: { en: 'INBOUND · AWAITING CONFIRMATION', title: ['接近', 'Inbound'], desc: ['入金を確かめています。承認されると、ミッションパッチが描かれます。', 'A deposit is on its way. Once it confirms, the mission patch is drawn.'], chip: 'INBOUND' },
+  sealed: { en: 'SINGULARITY · SEALED', title: ['特異点', 'Singularity'], desc: ['このケースには、価値が封じられています。', 'Value is sealed inside this case.'], chip: 'SEALED' },
+  rumbling: { en: 'CRITICAL · TRANSFER PENDING', title: ['臨界', 'Critical'], desc: ['中身が動き始めています。承認を待っています。', 'The contents have started to move. Waiting for confirmation.'], chip: 'CRITICAL' },
+  released: { en: 'TRANSCENDED · RELEASED', title: ['超越', 'Transcended'], desc: ['封は解かれ、価値は外の宇宙へ。', 'The seal is open, and the value has gone out into the universe.'], chip: 'RELEASED' },
+  error: { en: 'NO SIGNAL', title: ['', ''], desc: ['', ''], chip: 'NO SIGNAL' },
+};
+const T = (pair) => L(pair[0], pair[1]);
+
+// ── URL を読む（# の後ろ。? の形でも読める）
 function parseParams() {
   const raw = (location.hash || '').replace(/^#/, '');
   const q = new URLSearchParams(location.search);
@@ -39,29 +47,34 @@ function parseParams() {
   return { demo: false, addr, name: name ? name.slice(0, 40) : null, net };
 }
 
-// ── 紋
+// ── ミッションパッチ
 let seq = 0;
-function emblemFor(model, idp) {
+function patchFor(model, idp) {
   const f = model.first, m = model.move;
+  const name = ctx.name || '';
   switch (model.state) {
-    case 'gathering': return S.gathering({ id: idp });
-    case 'sealed': return S.sealed(f.hash, { id: idp, block: String(f.height), date: fmtDateDot(f.time) });
-    case 'rumbling': return S.rumbling(f.hash, { id: idp, block: String(f.height), date: fmtDateDot(f.time) });
-    case 'released': return S.released(f.hash, m.hash, { id: idp, block: String(f.height), date: fmtDateDot(f.time), moveBlock: String(m.height), moveDate: fmtDateDot(m.time) });
-    default: return S.empty({ id: idp });
+    case 'gathering': return S.gathering({ id: idp, name });
+    case 'sealed': return S.sealed(f.hash, { id: idp, block: String(f.height), date: fmtDateDot(f.time), name });
+    case 'rumbling': return S.rumbling(f.hash, { id: idp, block: String(f.height), date: fmtDateDot(f.time), name });
+    case 'released': return S.released(f.hash, m.hash, { id: idp, block: String(f.height), date: fmtDateDot(f.time), moveBlock: String(m.height), moveDate: fmtDateDot(m.time), name });
+    default: return S.empty({ id: idp, name });
   }
 }
 const layers = [$('#em-a'), $('#em-b')];
 let front = 1;
 let shownKey = '';
 let tessRaf = 0;
-function showEmblem(model) {
-  const key = [model.state, model.first && model.first.hash, model.move && model.move.hash].join(':');
-  if (key === shownKey) return false;
+let outTimer = 0;
+function showPatch(model, force = false) {
+  const key = [model.state, model.first && model.first.hash, model.move && model.move.hash, ctx.name].join(':');
+  if (key === shownKey && !force) return false;
   shownKey = key;
   const next = layers[1 - front], prev = layers[front];
-  next.innerHTML = emblemFor(model, 'v' + ++seq);
-  requestAnimationFrame(() => requestAnimationFrame(() => { next.classList.add('on'); prev.classList.remove('on'); }));
+  next.innerHTML = patchFor(model, 'v' + ++seq);
+  next.classList.remove('out');
+  requestAnimationFrame(() => requestAnimationFrame(() => { next.classList.add('on'); prev.classList.remove('on'); prev.classList.add('out'); }));
+  clearTimeout(outTimer);
+  outTimer = setTimeout(() => { prev.classList.remove('out'); if (!prev.classList.contains('on')) prev.innerHTML = ''; }, 1500);
   front = 1 - front;
   spin(model);
   return true;
@@ -107,7 +120,7 @@ function shake() {
 // ── 窓の外の星（ゆっくり進む。状態が変わると跳ぶ）
 const stars = (() => {
   const cv = $('#stars');
-  const ctx = cv.getContext('2d');
+  const ctx2 = cv.getContext('2d');
   let w = 0, h = 0, list = [], speed = 0.35, boost = 0, raf = 0, tint = '255,236,210';
   function size() {
     const r = cv.getBoundingClientRect();
@@ -117,8 +130,8 @@ const stars = (() => {
     list = Array.from({ length: 170 }, () => ({ x: (Math.random() - 0.5) * w * 2, y: (Math.random() - 0.5) * h * 2, z: Math.random() * w }));
   }
   function draw(step) {
-    ctx.fillStyle = boost > 1 ? 'rgba(2,3,4,.35)' : '#020304';
-    ctx.fillRect(0, 0, w, h);
+    ctx2.fillStyle = boost > 1 ? 'rgba(2,3,4,.35)' : '#020304';
+    ctx2.fillRect(0, 0, w, h);
     for (const s of list) {
       const pz = s.z;
       s.z -= step;
@@ -126,12 +139,12 @@ const stars = (() => {
       const k = (w * 0.5) / s.z, kp = (w * 0.5) / pz;
       const x = s.x * k + w / 2, y = s.y * k + h / 2;
       const a = Math.min(1, (1 - s.z / w) * 1.3);
-      ctx.strokeStyle = `rgba(${tint},${a})`;
-      ctx.lineWidth = Math.max(0.6, (1 - s.z / w) * 2.2);
-      ctx.beginPath();
-      ctx.moveTo(s.x * kp + w / 2, s.y * kp + h / 2);
-      ctx.lineTo(x, y);
-      ctx.stroke();
+      ctx2.strokeStyle = `rgba(${tint},${a})`;
+      ctx2.lineWidth = Math.max(0.6, (1 - s.z / w) * 2.2);
+      ctx2.beginPath();
+      ctx2.moveTo(s.x * kp + w / 2, s.y * kp + h / 2);
+      ctx2.lineTo(x, y);
+      ctx2.stroke();
     }
   }
   function frame() {
@@ -148,7 +161,7 @@ const stars = (() => {
     if (!document.hidden && !reduce) raf = requestAnimationFrame(frame);
   });
   return {
-    warp() { boost = 26; },
+    warp(k = 26) { boost = k; },
     tint(t) { tint = t; if (reduce) draw(0); },
   };
 })();
@@ -158,9 +171,11 @@ function fact(en, ja, value, cls = '') {
   const d = document.createElement('div');
   const dt = document.createElement('dt');
   dt.textContent = en;
-  const sm = document.createElement('small');
-  sm.textContent = ja;
-  dt.appendChild(sm);
+  if (ja && L(true, false)) {
+    const sm = document.createElement('small');
+    sm.textContent = ja;
+    dt.appendChild(sm);
+  }
   const dd = document.createElement('dd');
   dd.textContent = value;
   if (cls) dd.className = cls;
@@ -196,6 +211,8 @@ const hnum = (n) => '#' + Number(n).toLocaleString('en-US');
 
 let current = null;
 let ctx = { demo: false, addr: null, name: null, net: 'main', type: null };
+let price = null;
+let tipHeight = null;
 
 function setReadouts(model) {
   const f = model.first, m = model.move;
@@ -215,6 +232,15 @@ function setReadouts(model) {
   for (const k of Object.keys(r)) $('#vp-' + k).textContent = r[k];
 }
 
+// 額の円・ドル換算（参考）
+function fiatLine(sats) {
+  const el = $('#amount-fiat');
+  if (!price || !(sats > 0)) { el.hidden = true; return; }
+  const v = convert('sats', sats, price);
+  el.hidden = false;
+  el.textContent = `≈ ¥${fmt('jpy', v.jpy)} · $${fmt('usd', v.usd)}  (${L('参考', 'indicative')})`;
+}
+
 function render(model, { animate = true } = {}) {
   current = model;
   const st = model.state;
@@ -229,8 +255,8 @@ function render(model, { animate = true } = {}) {
   chip.appendChild(t);
   $('#state-en').textContent = c.en;
   $('#state-en').className = 'label' + (st === 'released' ? ' ice' : st === 'gathering' ? ' sig' : '');
-  $('#state-title').textContent = c.title;
-  $('#state-desc').textContent = model.desc || c.desc;
+  $('#state-title').textContent = T(c.title);
+  $('#state-desc').textContent = model.desc || T(c.desc);
   stars.tint(st === 'released' ? '200,232,255' : '255,236,210');
 
   // 額
@@ -239,17 +265,20 @@ function render(model, { animate = true } = {}) {
   const sub = $('#amount-sub');
   sub.hidden = true;
   box.hidden = !['gathering', 'sealed', 'rumbling', 'released'].includes(st);
+  let shown = 0;
   if (st === 'gathering') {
-    $('#amount-label').textContent = 'INBOUND · 確認中の入金';
-    $('#amount').textContent = fmtSats(model.pendingIn || 0);
+    $('#amount-label').textContent = L('INBOUND · 確認中の入金', 'INBOUND · UNCONFIRMED DEPOSIT');
+    shown = model.pendingIn || 0;
   } else if (model.first) {
-    $('#amount-label').textContent = 'PAYLOAD · 封じた額（最初の入金）';
-    $('#amount').textContent = fmtSats(model.first.amount);
+    $('#amount-label').textContent = L('PAYLOAD · 封じた額（最初の入金）', 'PAYLOAD · FIRST DEPOSIT');
+    shown = model.first.amount;
     if (st === 'released' || total !== model.first.amount) {
       sub.hidden = false;
-      sub.textContent = `NOW · いまの残高 ${fmtSats(total)} sats`;
+      sub.textContent = L(`NOW · いまの残高 ${fmtSats(total)} sats`, `NOW · BALANCE ${fmtSats(total)} sats`);
     }
   }
+  $('#amount').textContent = fmtSats(shown);
+  fiatLine(st === 'released' ? 0 : shown);
 
   // 計器
   const facts = $('#facts');
@@ -258,13 +287,14 @@ function render(model, { animate = true } = {}) {
   const list = [];
   if (st === 'sealed' && f) {
     list.push(fact('SEALED', '封じた日', fmtDateDot(f.time)), fact('IN ORBIT', '周回', `${daysBetweenJST(f.time, now()).toLocaleString('en-US')} DAYS`, 'hot'), fact('BLOCK', '封印', hnum(f.height)));
+    if (tipHeight && f.height) list.push(fact('CONFIRMS', '承認', (tipHeight - f.height + 1).toLocaleString('en-US'), 'conf'));
     if ((model.depositCount || 1) > 1) list.push(fact('DEPOSITS', '入金', `${model.depositCount} TX`));
   } else if (st === 'rumbling' && f) {
-    list.push(fact('SEALED', '封じた日', fmtDateDot(f.time)), fact('BLOCK', '封印', hnum(f.height)), fact('TRANSFER', '移動', '承認待ち', 'hot'));
+    list.push(fact('SEALED', '封じた日', fmtDateDot(f.time)), fact('BLOCK', '封印', hnum(f.height)), fact('TRANSFER', '移動', L('承認待ち', 'PENDING'), 'hot'));
   } else if (st === 'released' && f && m) {
     list.push(fact('ORBIT', '封じていた', `${daysBetweenJST(f.time, m.time).toLocaleString('en-US')} DAYS`, 'cool'), fact('SEAL', '入金', hnum(f.height)), fact('RELEASE', '移動', hnum(m.height), 'cool'), fact('DATE', '移動日', fmtDateDot(m.time)));
   } else if (st === 'gathering') {
-    list.push(fact('STATUS', '状態', '承認待ち', 'sig'), fact('INBOUND', '入金', `${Math.max(1, model.pendingCount || 1)} TX`), fact('EMBLEM', '紋', '承認後に'));
+    list.push(fact('STATUS', '状態', L('承認待ち', 'PENDING'), 'sig'), fact('INBOUND', '入金', `${Math.max(1, model.pendingCount || 1)} TX`), fact('PATCH', 'パッチ', L('承認後に', 'AFTER CONFIRM')));
   } else if (st === 'empty') {
     list.push(fact('TARGET', '宛先', shortAddr(model.address)), fact('PAYLOAD', '中身', '0 sats'));
   }
@@ -273,38 +303,40 @@ function render(model, { animate = true } = {}) {
   // 操作卓
   const act = $('#actions');
   act.innerHTML = '';
-  const verify = () => key('VERIFY', 'mempool で確かめる', ctx.demo ? () => toast('見本なので、確かめる先はありません') : null, '', ctx.demo ? '' : `${model.web}/address/${model.address}`);
-  if (st === 'sealed') act.append(key('RETURN', '受け取った方へ', () => openSheet('#guide-sheet'), 'wide primary'), key('FUND', '入金用のQR', openQr), verify());
-  else if (st === 'released') act.append(key('CAPTURE', '紋を画像で保存', saveEmblem, 'wide primary ice'), verify());
-  else if (st === 'gathering') act.append(verify(), key('FUND', '入金用のQR', openQr));
+  const verify = () => key('VERIFY', L('mempool で確かめる', 'Check on mempool'), ctx.demo ? () => toast(L('見本なので、確かめる先はありません', 'This is a demo — there is nothing to check')) : null, '', ctx.demo ? '' : `${model.web}/address/${model.address}`);
+  if (st === 'sealed') act.append(key('RETURN', L('受け取った方へ', 'For the recipient'), () => openSheet('#guide-sheet'), 'wide primary'), key('FUND', L('入金用のQR', 'Deposit QR'), openQr), verify());
+  else if (st === 'released') act.append(key('CAPTURE', L('パッチを画像で保存', 'Save the patch'), savePatch, 'wide primary ice'), verify());
+  else if (st === 'gathering') act.append(verify(), key('FUND', L('入金用のQR', 'Deposit QR'), openQr));
   else if (st === 'rumbling') { const v = verify(); v.classList.add('wide'); act.append(v); }
-  else if (st === 'empty') act.append(key('FUND', '入金用のQR', openQr, 'wide primary'), verify());
+  else if (st === 'empty') act.append(key('FUND', L('入金用のQR', 'Deposit QR'), openQr, 'wide primary'), verify());
 
   // 記録
-  const L = [];
-  if (st === 'loading') L.push(['ESTABLISHING LINK…', '']);
-  else if (ctx.demo) L.push(['DEMO MODE · 見本の記録（実在のブロック）', '']);
-  if (st !== 'loading') L.push(['LINK ESTABLISHED', 'ok'], [`TARGET ${shortAddr(model.address)}`, '']);
-  if (st === 'sealed') L.push([`SEAL BLOCK ${hnum(f.height)} VERIFIED`, ''], [`ORBIT ${daysBetweenJST(f.time, now())} DAYS`, ''], ['STATUS · SINGULARITY HOLDING', 'ok']);
-  else if (st === 'released') L.push([`SEAL BLOCK ${hnum(f.height)}`, ''], [`RELEASE BLOCK ${hnum(m.height)} VERIFIED`, ''], ['STATUS · TESSERACT OPEN', 'ok']);
-  else if (st === 'gathering') L.push([`INBOUND TX DETECTED · ${Math.max(1, model.pendingCount || 1)}`, ''], ['AWAITING CONFIRMATION', 'ok']);
-  else if (st === 'rumbling') L.push(['OUTBOUND TX DETECTED', 'warn'], ['AWAITING CONFIRMATION', '']);
-  else if (st === 'empty') L.push(['NO PAYLOAD DETECTED', ''], ['STANDBY', 'ok']);
-  logLines(L);
+  const lg = [];
+  if (st === 'loading') lg.push(['ESTABLISHING LINK…', '']);
+  else if (ctx.demo) lg.push([L('DEMO MODE · 見本の記録（実在のブロック）', 'DEMO MODE · SAMPLE RECORD (REAL BLOCKS)'), '']);
+  if (st !== 'loading') lg.push(['LINK ESTABLISHED', 'ok'], [`TARGET ${shortAddr(model.address)}`, '']);
+  if (st === 'sealed') lg.push([`SEAL BLOCK ${hnum(f.height)} VERIFIED`, ''], [`ORBIT ${daysBetweenJST(f.time, now())} DAYS`, ''], ['STATUS · SINGULARITY HOLDING', 'ok']);
+  else if (st === 'released') lg.push([`SEAL BLOCK ${hnum(f.height)}`, ''], [`RELEASE BLOCK ${hnum(m.height)} VERIFIED`, ''], ['STATUS · TESSERACT OPEN', 'ok']);
+  else if (st === 'gathering') lg.push([`INBOUND TX DETECTED · ${Math.max(1, model.pendingCount || 1)}`, ''], ['AWAITING CONFIRMATION', 'ok']);
+  else if (st === 'rumbling') lg.push(['OUTBOUND TX DETECTED', 'warn'], ['AWAITING CONFIRMATION', '']);
+  else if (st === 'empty') lg.push(['NO PAYLOAD DETECTED', ''], ['STANDBY', 'ok']);
+  logLines(lg);
 
   setReadouts(model);
   $('#err').hidden = true;
-  const changed = showEmblem(model);
+  const changed = showPatch(model);
   if (animate && changed && st === 'released') flash();
   if (animate && st === 'rumbling') shake();
 }
 
+let lastError = null;
 function renderError(kind) {
+  lastError = kind;
   const E = {
-    noaddr: ['アドレスがありません', 'このURLに、コインのアドレスが入っていません'],
-    badaddr: ['アドレスを読めません', 'このURLのアドレスを読み取れませんでした'],
-    net: ['通信が途絶えました', 'ブロックチェーンの公開データに届きませんでした'],
-  }[kind] || ['読めません', ''];
+    noaddr: [['アドレスがありません', 'No address'], ['このURLに、ケースのアドレスが入っていません', 'This URL doesn’t contain a case address']],
+    badaddr: [['アドレスを読めません', 'Can’t read the address'], ['このURLのアドレスを読み取れませんでした', 'The address in this URL couldn’t be read']],
+    net: [['通信が途絶えました', 'Signal lost'], ['ブロックチェーンの公開データに届きませんでした', 'Couldn’t reach public blockchain data']],
+  }[kind] || [['読めません', 'Unreadable'], ['', '']];
   current = null;
   document.body.dataset.state = 'error';
   const chip = $('#chip');
@@ -312,31 +344,31 @@ function renderError(kind) {
   chip.innerHTML = '<span class="t">NO SIGNAL</span>';
   $('#state-en').textContent = 'NO SIGNAL';
   $('#state-en').className = 'label';
-  $('#state-title').textContent = E[0];
-  $('#state-desc').textContent = E[1];
+  $('#state-title').textContent = T(E[0]);
+  $('#state-desc').textContent = T(E[1]);
   $('#amount-box').hidden = true;
   $('#facts').innerHTML = '';
   $('#actions').innerHTML = '';
   setReadouts({ state: 'error' });
-  showEmblem({ state: 'empty' });
+  showPatch({ state: 'empty' });
   const err = $('#err');
   err.hidden = false;
   err.innerHTML = '';
   const p = document.createElement('p');
   if (kind === 'net') {
-    p.textContent = '電波の届くところで、もう一度試してください。アドレスはURLに入っているので、ほかのブロックエクスプローラーでも確かめられます。';
+    p.textContent = L('電波の届くところで、もう一度試してください。アドレスはURLに入っているので、ほかのブロックエクスプローラーでも確かめられます。', 'Try again where you have a signal. The address is in the URL, so any other block explorer can check it too.');
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'btn wide';
-    b.textContent = 'もう一度つなぐ';
+    b.textContent = L('もう一度つなぐ', 'Reconnect');
     b.addEventListener('click', () => refresh());
     err.append(p, b);
   } else {
-    p.textContent = 'コインをかざして開いたのにこの表示が出る場合は、タグへの書き込みをやり直してください。';
+    p.textContent = L('蓋にかざして開いたのにこの表示が出る場合は、NFCタグへの書き込みをやり直してください。', 'If you see this after tapping the lid, write the NFC tag again.');
     const a = document.createElement('a');
     a.className = 'btn wide';
-    a.href = '../setup/';
-    a.textContent = '打ち上げの手順を開く';
+    a.href = '../nfc/';
+    a.textContent = L('NFC Tools の使い方を見る', 'How to use NFC Tools');
     err.append(p, a);
   }
   logLines([['LINK FAILED', 'warn'], [kind === 'net' ? 'NO RESPONSE FROM NODES' : 'NO TARGET IN URL', '']]);
@@ -358,6 +390,12 @@ function runDemo(s) {
   render(demoModel(state), { animate: prev !== undefined && prev !== state });
   $$('#demo-bar button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.demo === state)));
 }
+const demoName = () => L('はるへ', 'For Haru');
+function demoNetline() {
+  const nl = $('#netline');
+  nl.hidden = false;
+  nl.textContent = L('DEMO · 実在のブロック #840,000 と #905,900 で描いています', 'DEMO · DRAWN FROM REAL BLOCKS #840,000 AND #905,900');
+}
 
 // ── 本番
 let pollTimer = 0;
@@ -374,7 +412,15 @@ async function refresh() {
     renderError('net');
   }
 }
-async function tipLine() {
+function netline(h, host, fresh) {
+  const nl = $('#netline');
+  nl.hidden = false;
+  const conf = current && current.state === 'sealed' && current.first && current.first.height ? ` · ${(h - current.first.height + 1).toLocaleString('en-US')} CONFIRMATIONS` : '';
+  nl.textContent = `NODE LINK · ${host} · TIP ${hnum(h)}${conf}`;
+  if (fresh) { nl.classList.remove('fresh'); void nl.offsetWidth; nl.classList.add('fresh'); }
+}
+// テスト用ネットワーク（testnet / signet）の先頭の高さ
+async function tipLineTest() {
   const apis = (NETS[ctx.net] || NETS.main).apis;
   for (const base of apis) {
     const c = new AbortController();
@@ -384,10 +430,7 @@ async function tipLine() {
       if (!r.ok) continue;
       const h = Number(await r.text());
       if (!Number.isFinite(h)) continue;
-      const nl = $('#netline');
-      nl.hidden = false;
-      const conf = current && current.state === 'sealed' && current.first && current.first.height ? ` · ${(h - current.first.height + 1).toLocaleString('en-US')} CONFIRMATIONS` : '';
-      nl.textContent = `NODE LINK · ${new URL(base).host} · TIP ${hnum(h)}${conf}`;
+      netline(h, new URL(base).host, false);
       return;
     } catch {
       /* 次へ */
@@ -396,17 +439,48 @@ async function tipLine() {
     }
   }
 }
+// 本番のネットワーク：最新ブロックを見つづけ、届いたら合図する
+function watchMain() {
+  const rail = mountRail($('#chain'), { max: 6 });
+  $('#chain').hidden = false;
+  watchBlocks((d, { isNew }) => {
+    rail.update(d, { isNew });
+    if (!d) return;
+    const b = d.blocks[0];
+    const first = tipHeight === null;
+    tipHeight = b.height;
+    if (first && current && current.state === 'sealed' && !ctx.demo) render(current, { animate: false });
+    if (!ctx.demo) netline(b.height, d.source, isNew);
+    if (isNew) {
+      sweep();
+      stars.warp(14);
+      if (current && current.state === 'sealed') render(current, { animate: false });
+    }
+  });
+}
+
+// ── 打ち上げの途中（同じブラウザ）なら、タグからの接続を知らせる
+function uplinkCheck(addr) {
+  try {
+    const raw = store.get('infinity:setup:v1');
+    store.set('infinity:uplink:' + addr.toLowerCase(), String(Date.now()));
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    const a = String(s.addrInput || '').trim().replace(/^bitcoin:/i, '').split('?')[0].replace(/\s+/g, '').toLowerCase();
+    if (a && a === addr.toLowerCase() && Number(s.step) >= 3 && Number(s.step) < 6) $('#uplink').hidden = false;
+  } catch { /* 読めなくても続ける */ }
+}
 
 // ── 入金の QR
 function openQr() {
-  if (ctx.demo || !current) { toast('見本なので、入金先はありません'); return; }
+  if (ctx.demo || !current) { toast(L('見本なので、入金先はありません', 'This is a demo — there is no deposit address')); return; }
   $('#qr').innerHTML = qrSvg(bip21(current.address));
   $('#qr-addr').textContent = group4(current.address).join(' ');
   openSheet('#qr-sheet');
 }
 $('#copy-addr').addEventListener('click', async () => {
-  try { await navigator.clipboard.writeText(current.address); toast('アドレスをコピーしました'); }
-  catch { toast('コピーできませんでした。長押しで選んでください'); }
+  try { await navigator.clipboard.writeText(current.address); toast(L('アドレスをコピーしました', 'Address copied')); }
+  catch { toast(L('コピーできませんでした。長押しで選んでください', 'Couldn’t copy. Long-press to select it')); }
 });
 
 // ── 受け取った方へ
@@ -419,16 +493,17 @@ function pick(which) {
 }
 async function showFee() {
   const n = $('#fee-n'), p = $('#fee-p');
-  if (ctx.demo) { n.textContent = '約220 sats'; p.textContent = '（見本の額の約2%）'; return; }
-  n.textContent = '計算中…';
+  if (ctx.demo) { n.textContent = L('約220 sats', '≈ 220 sats'); p.textContent = L('（見本の額の約2%）', '(about 2% of the demo amount)'); return; }
+  n.textContent = L('計算中…', 'Calculating…');
   p.textContent = '';
   const fr = await loadFeeRate(ctx.net).catch(() => null);
-  if (!fr || !current) { n.textContent = '取得できませんでした'; return; }
+  if (!fr || !current) { n.textContent = L('取得できませんでした', 'Unavailable'); return; }
   const vb = estimateSweepVbytes(ctx.type, Math.max(1, (current.balance && current.balance.utxos) || 1));
   const fee = Math.ceil(fr.rate * vb);
   const total = current.balance ? current.balance.confirmed + current.balance.pending : 0;
-  n.textContent = `約${fmtSats(fee)} sats`;
-  p.textContent = total > 0 ? `（いまの残高の約${Math.max(1, Math.round((fee / total) * 100))}%）` : '';
+  n.textContent = L(`約${fmtSats(fee)} sats`, `≈ ${fmtSats(fee)} sats`);
+  const pct = total > 0 ? Math.max(1, Math.round((fee / total) * 100)) : 0;
+  p.textContent = total > 0 ? L(`（いまの残高の約${pct}%）`, `(about ${pct}% of the balance)`) : '';
 }
 $('#pick-keep').addEventListener('click', () => pick('keep'));
 $('#pick-move').addEventListener('click', () => pick('move'));
@@ -456,7 +531,7 @@ $('#sheet-back').addEventListener('click', closeSheets);
 $$('[data-close]').forEach((b) => b.addEventListener('click', closeSheets));
 $('#stage').addEventListener('click', () => {
   if (!current) return;
-  $('#zimg').innerHTML = emblemFor(current, 'z' + ++seq);
+  $('#zimg').innerHTML = patchFor(current, 'z' + ++seq);
   $('#zoom').hidden = false;
   $('#zoom').focus();
 });
@@ -475,12 +550,12 @@ function toast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('on'), 2600);
 }
 
-// ── 紋を画像に
-async function saveEmblem() {
+// ── ミッションパッチを画像に
+async function savePatch() {
   if (!current) return;
   try {
     const size = 1400;
-    const svg = emblemFor(current, 'p' + ++seq).replace('<svg ', `<svg width="${size}" height="${size}" `);
+    const svg = patchFor(current, 'p' + ++seq).replace('<svg ', `<svg width="${size}" height="${size}" `);
     const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
     const img = new Image();
     await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
@@ -493,10 +568,10 @@ async function saveEmblem() {
     URL.revokeObjectURL(url);
     const png = await new Promise((r) => cv.toBlob(r, 'image/png'));
     const f = current.first, m = current.move;
-    const fname = f ? `infinity-${f.height}${m && m.height ? '-' + m.height : ''}.png` : 'infinity.png';
+    const fname = f ? `infinity-patch-${f.height}${m && m.height ? '-' + m.height : ''}.png` : 'infinity-patch.png';
     const file = new File([png], fname, { type: 'image/png' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title: 'INFINITY の紋' });
+      await navigator.share({ files: [file], title: L('INFINITY のミッションパッチ', 'INFINITY mission patch') });
     } else {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(png);
@@ -505,27 +580,38 @@ async function saveEmblem() {
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-      toast('紋を保存しました');
+      toast(L('ミッションパッチを保存しました', 'Mission patch saved'));
     }
   } catch (e) {
     if (e && e.name === 'AbortError') return;
-    toast('保存できませんでした');
+    toast(L('保存できませんでした', 'Couldn’t save'));
   }
 }
 
+// ── 言語が変わったら書き直す
+onLang(() => {
+  if (ctx.demo) { ctx.name = demoName(); $('#name').textContent = ctx.name; demoNetline(); }
+  if (current) { shownKey = ''; render(current, { animate: false }); }
+  else if (lastError) renderError(lastError);
+  else if (document.body.dataset.state === 'loading') { $('#state-title').textContent = T(COPY.loading.title); $('#state-desc').textContent = T(COPY.loading.desc); }
+  if (!$('#move-info').hidden) showFee();
+});
+
 // ── はじめる
 async function start() {
+  initTilt();
   const p = parseParams();
+  fetchPrices().then((pr) => { price = pr; if (current) render(current, { animate: false }); });
   if (p.demo) {
-    ctx = { demo: true, addr: null, name: 'はるへ', net: 'main', type: 'p2wpkh' };
+    ctx = { demo: true, addr: null, name: demoName(), net: 'main', type: 'p2wpkh' };
     $('#demo-badge').hidden = false;
     $('#demo-bar').hidden = false;
     $('#name').hidden = false;
     $('#name').textContent = ctx.name;
     $$('#demo-bar button').forEach((b) => b.addEventListener('click', () => runDemo(b.dataset.demo)));
     runDemo(p.demoState);
-    $('#netline').hidden = false;
-    $('#netline').textContent = 'DEMO · 実在のブロック #840,000 と #905,900 で描いています';
+    demoNetline();
+    watchMain();
     return;
   }
   if (!p.addr) { renderError('noaddr'); return; }
@@ -534,10 +620,12 @@ async function start() {
   const net = v.network === 'main' ? 'main' : p.net === 'signet' ? 'signet' : 'test';
   ctx = { demo: false, addr: v.address, name: p.name, net, type: v.type };
   if (p.name) { $('#name').hidden = false; $('#name').textContent = p.name; }
-  if (net !== 'main') { $('#demo-badge').hidden = false; $('#demo-badge').textContent = net === 'signet' ? 'SIGNET · テスト用' : 'TESTNET · テスト用'; }
+  if (net !== 'main') { $('#demo-badge').hidden = false; $('#demo-badge').textContent = net === 'signet' ? 'SIGNET · TEST' : 'TESTNET · TEST'; }
+  uplinkCheck(v.address);
   render({ state: 'loading', address: v.address }, { animate: false });
   await refresh();
-  tipLine();
+  if (net === 'main') watchMain();
+  else tipLineTest();
 }
 window.addEventListener('hashchange', () => location.reload());
 start();

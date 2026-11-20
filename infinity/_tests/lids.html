@@ -1,0 +1,11 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@900&display=swap">
+<style>body{margin:0;background:#05070a;display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:18px}svg{width:100%;height:auto}.s{grid-column:span 1;background:#0b1015}</style></head>
+<body><div id="a"></div><div id="b"></div><div id="c"></div><div id="d"></div><div class="s" id="s1"></div><div class="s" id="s2"></div>
+<script type="module">
+import { lidSVG, caseScene } from '../assets/js/lids.js';
+for (const k of ['a','b','c','d']) document.getElementById(k).innerHTML = lidSVG(k);
+document.getElementById('s1').innerHTML = caseScene('a', {id:'x1'});
+document.getElementById('s2').innerHTML = caseScene('d', {id:'x2'});
+window.__ok = true;
+</script></body></html>

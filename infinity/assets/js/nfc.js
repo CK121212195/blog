@@ -95,18 +95,35 @@ export function sameUrl(a, b) {
 // 失敗の理由を、ことばに
 export function errorText(e, action = 'write') {
   const name = (e && e.name) || '';
+  const en = typeof document !== 'undefined' && document.documentElement.lang === 'en';
+  if (en) {
+    const verb = action === 'lock' ? 'lock' : action === 'read' ? 'read' : 'write';
+    switch (name) {
+      case 'TimeoutError': return 'No tag was detected in time. Press again and hold the lid to the back of your phone.';
+      case 'AbortError': return `Stopped the ${verb}.`;
+      case 'NotAllowedError': return 'NFC permission was not granted. Choose “Allow” when asked, or allow NFC in the browser’s site settings.';
+      case 'NotSupportedError': return action === 'lock'
+        ? 'This browser can’t lock tags. Update Chrome, or lock it in NFC Tools.'
+        : 'NFC isn’t available on this device or browser.';
+      case 'NotReadableError': return 'NFC is off or unavailable. Turn NFC on in Settings and try again.';
+      case 'NetworkError': return `The connection to the tag dropped. Keep the lid still and try the ${verb} again.`;
+      case 'UnreadableError': return 'The tag couldn’t be read. The write may not have worked.';
+      case 'InvalidStateError': return 'Another NFC operation is still running. Wait a moment and try again.';
+      default: return `Couldn’t ${verb} (${name || 'unknown error'}). Please try again.`;
+    }
+  }
   const verb = action === 'lock' ? 'ロック' : action === 'read' ? '読み取り' : '書き込み';
   switch (name) {
-    case 'TimeoutError': return `時間内にかざされませんでした。もう一度押して、コインをスマホの背面に当ててください。`;
+    case 'TimeoutError': return '時間内にかざされませんでした。もう一度押して、蓋をスマホの背面に当ててください。';
     case 'AbortError': return `${verb}を止めました。`;
-    case 'NotAllowedError': return `NFCの使用が許可されていません。表示された確認で「許可」を選ぶか、ブラウザのサイト設定でNFCを許可してください。`;
+    case 'NotAllowedError': return 'NFCの使用が許可されていません。表示された確認で「許可」を選ぶか、ブラウザのサイト設定でNFCを許可してください。';
     case 'NotSupportedError': return action === 'lock'
-      ? 'このブラウザでは、タグのロックに対応していません。Chromeを新しくするか、NFC Tools などのアプリでロックしてください。'
+      ? 'このブラウザでは、タグのロックに対応していません。Chromeを新しくするか、NFC Tools でロックしてください。'
       : 'この端末・ブラウザでは、NFCを使えません。';
     case 'NotReadableError': return '端末のNFCがオフになっているか、NFCを使えない状態です。設定でNFCをオンにして、もう一度。';
-    case 'NetworkError': return `タグとのやりとりが途中で切れました。コインを動かさずに、もう一度${verb}してください。`;
+    case 'NetworkError': return `タグとのやりとりが途中で切れました。蓋を動かさずに、もう一度${verb}してください。`;
     case 'UnreadableError': return 'タグを読めませんでした。書き込みがうまくいっていないかもしれません。';
-    case 'InvalidStateError': return `ほかのNFCの操作が終わっていません。少し待って、もう一度。`;
+    case 'InvalidStateError': return 'ほかのNFCの操作が終わっていません。少し待って、もう一度。';
     default: return `${verb}できませんでした（${name || '不明なエラー'}）。もう一度お試しください。`;
   }
 }
