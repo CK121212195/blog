@@ -1,0 +1,9 @@
+/* 帰還の手順（打ち上げの手順の見た目を使う） */
+.gd { padding-bottom: 8px; }
+.warn-box { display: flex; flex-direction: column; gap: 6px; padding: 16px; border: 1px solid rgba(255, 90, 60, .55); background: rgba(255, 90, 60, .07); --bc: rgba(255, 90, 60, .9); }
+.warn-box .label { color: var(--alert); }
+.warn-box strong { font-size: 15.5px; line-height: 1.6; }
+.warn-box p { margin: 0; font-size: 13.5px; line-height: 1.8; color: #c3ced6; }
+.card .p { margin: 0; }
+.card a { color: var(--amber); }
+.gd .nav { position: static; margin: 4px 0 0; padding: 4px 0 8px; background: none; }
