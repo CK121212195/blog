@@ -1,10 +1,15 @@
-// 打ち上げの手順（封じの手順）── 鍵は扱わず、公開の受取アドレスだけで進める
+// 打ち上げの手順（封じの手順）── 鍵は扱わず、公開の受取アドレスだけで進める。このページはどこにも通信しない
 import { $, $$, group4, store, prefersReducedMotion } from './util.js';
-import { validateAddress, REASON_TEXT } from './address.js';
+import { validateAddress, REASON_TEXT, REASON_TEXT_EN } from './address.js';
+import { L, onLang, mountLangToggle } from './i18n.js';
+import { mountAmbient } from './ambient.js';
 import { omamoriBase, omamoriUrl, ndefBytes, nameRoom, TAG_BYTES } from './site.js';
 import * as NFC from './nfc.js';
 import { bip21, qrSvg } from './qr.js';
 import * as SG from './singularity.js';
+
+mountLangToggle();
+mountAmbient({ lensX: 0.86 });
 
 const KEY = 'infinity:setup:v1';
 const KEEP_MS = 14 * 86400 * 1000; // 途中の記録は2週間で捨てる
@@ -18,8 +23,8 @@ function fresh() {
   return {
     step: 0, method: 'seed', checks: [false, false, false],
     addrInput: '', testNet: 'test', chips: [], chipsFor: '', name: '',
-    os: NFC.nfcSupported() ? 'android' : 'iphone',
-    writtenUrl: '', verifiedUrl: '', lockedUrl: '', iosUrl: '', sealedUrl: '',
+    os: /android/i.test(navigator.userAgent) ? 'android' : 'iphone',
+    writtenUrl: '', verifiedUrl: '', lockedUrl: '', tapUrl: '', sealedUrl: '',
   };
 }
 function load() {
@@ -29,6 +34,7 @@ function load() {
     const o = JSON.parse(raw);
     if (!o || typeof o !== 'object' || !o.t || Date.now() - o.t > KEEP_MS) return null;
     const s = { ...fresh(), ...o };
+    if (o.iosUrl && !o.tapUrl) s.tapUrl = o.iosUrl; // 前の版の記録
     if (!Array.isArray(s.checks) || s.checks.length !== 3) s.checks = [false, false, false];
     if (!Array.isArray(s.chips)) s.chips = [];
     if (!['seed', 'key'].includes(s.method)) s.method = 'seed';
@@ -54,7 +60,7 @@ const okChecks = () => S.checks.every(Boolean);
 const okChips = () => !!(V && V.ok && S.chipsFor === V.address && S.chips.length === group4(V.address).length && S.chips.every(Boolean));
 const okName = () => !!(V && V.ok && ndefBytes(url()) <= TAG_BYTES);
 const okAddr = () => okChips() && okName();
-const okNfc = () => { const u = url(); return !!u && (S.writtenUrl === u || S.iosUrl === u); };
+const okNfc = () => { const u = url(); return !!u && (S.writtenUrl === u || S.tapUrl === u); };
 const okSeal = () => { const u = url(); return !!u && S.sealedUrl === u; };
 const NEED = [() => true, () => true, () => true, okChecks, okAddr, okNfc, okSeal];
 function clampStep(n) {
@@ -96,12 +102,18 @@ window.addEventListener('popstate', (e) => {
   go(n, { mode: 'none' });
 });
 
+// 上の帯：工程が一つ終わるごとに、ブロックが一つ刻まれる
+let lastTop = 0;
 function renderTop() {
   const inSteps = cur >= 1 && cur <= 5;
   $('#dots').hidden = !inSteps;
   $('#top-label').hidden = inSteps;
   $('#top-label').textContent = cur === 6 ? 'SEALED' : 'LAUNCH SEQUENCE';
-  $$('#dots span').forEach((d, i) => { const k = i + 1; d.className = k < cur ? 'done' : k === cur ? 'now' : ''; });
+  $$('#dots i').forEach((d, i) => {
+    const k = i + 1;
+    d.className = k < cur ? 'done' + (k === cur - 1 && cur > lastTop ? ' just' : '') : k === cur ? 'now' : '';
+  });
+  lastTop = cur;
 }
 
 function enter(n) {
@@ -134,7 +146,7 @@ function renderIntro() {
   $('#resume').hidden = !can;
   $('#restart').hidden = !can;
   $('#start').hidden = can;
-  if (can) $('#resume').textContent = at === LAST ? '前回の封印を見る' : `続きから（T−${6 - at}）`;
+  if (can) $('#resume').textContent = at === LAST ? L('前回の封印を見る', 'View the last sealed case') : L(`続きから（T−${6 - at}）`, `Resume (T−${6 - at})`);
 }
 $('#start').addEventListener('click', () => go(1));
 $('#resume').addEventListener('click', () => go(clampStep(S.step)));
@@ -168,21 +180,21 @@ $$('#method-seg button').forEach((b) => b.addEventListener('click', () => {
 
 // ── 2 札を確かめる
 const CHECK_TEXT = {
-  seed: ['12語を、番号をつけて札に書いた（ウォレットの名前とアドレスの種類も）', '札と、ウォレットに表示された12語を、1語ずつ見比べた', '札の12語から復元して、同じ受取アドレスが出た'],
-  key: ['秘密鍵を、札にはっきり書いた（ウォレットの名前も）', '札と、ウォレットに表示された秘密鍵を、1文字ずつ見比べた', '札の秘密鍵を読み込んで、同じ受取アドレスになった'],
+  seed: [['12語を、番号をつけて札に書いた（ウォレットの名前とアドレスの種類も）', 'I wrote the 12 words on the slip, numbered (plus the wallet name and address type)'], ['札と、ウォレットに表示された12語を、1語ずつ見比べた', 'I compared the slip with the wallet, word by word'], ['札の12語から復元して、同じ受取アドレスが出た', 'Restoring from the slip gave the same receive address']],
+  key: [['秘密鍵を、札にはっきり書いた（ウォレットの名前も）', 'I wrote the private key clearly on the slip (plus the wallet name)'], ['札と、ウォレットに表示された秘密鍵を、1文字ずつ見比べた', 'I compared the slip with the wallet, character by character'], ['札の秘密鍵を読み込んで、同じ受取アドレスになった', 'Importing the slip’s key gave the same receive address']],
 };
 const RESTORE_TEXT = {
-  seed: '別のウォレットアプリ、またはウォレットの「復元」「インポート」で、新しいウォレットとして札の12語を入れます。',
-  key: '秘密鍵を読み込める（インポートできる）ウォレットに、札の秘密鍵を入れます。',
+  seed: ['別のウォレットアプリ、またはウォレットの「復元」「インポート」で、新しいウォレットとして札の12語を入れます。', 'In another wallet app, or your wallet’s “Restore” / “Import”, enter the slip’s 12 words as a new wallet.'],
+  key: ['秘密鍵を読み込める（インポートできる）ウォレットに、札の秘密鍵を入れます。', 'Enter the slip’s private key into a wallet that can import private keys.'],
 };
 function renderChecks() {
   const t = CHECK_TEXT[S.method];
   $$('#checks .ck').forEach((b, i) => {
     b.setAttribute('aria-pressed', String(!!S.checks[i]));
-    $('.ck-t', b).textContent = t[i];
+    $('.ck-t', b).textContent = L(t[i][0], t[i][1]);
   });
-  $('#rh-1').textContent = RESTORE_TEXT[S.method];
-  setNext($('#checks-next'), okChecks(), '次へ：座標を照合する', 'すべて確かめると進めます');
+  $('#rh-1').textContent = L(RESTORE_TEXT[S.method][0], RESTORE_TEXT[S.method][1]);
+  setNext($('#checks-next'), okChecks(), L('次へ：座標を照合する', 'Next: lock the coordinates'), L('すべて確かめると進めます', 'Check all three to continue'));
 }
 $$('#checks .ck').forEach((b) => b.addEventListener('click', () => {
   const i = Number(b.dataset.ck);
@@ -192,7 +204,7 @@ $$('#checks .ck').forEach((b) => b.addEventListener('click', () => {
 }));
 
 // ── 3 アドレスを照合する
-const SHORT_TYPE = { p2wpkh: 'bc1q・ネイティブSegWit', p2wsh: 'bc1q・スクリプト', p2tr: 'bc1p・Taproot', p2pkh: '1で始まる・レガシー', p2sh: '3で始まる' };
+const SHORT_TYPE = { p2wpkh: ['bc1q・ネイティブSegWit', 'bc1q · native SegWit'], p2wsh: ['bc1q・スクリプト', 'bc1q · script'], p2tr: ['bc1p・Taproot', 'bc1p · Taproot'], p2pkh: ['1で始まる・レガシー', 'starts with 1 · legacy'], p2sh: ['3で始まる', 'starts with 3'] };
 const cleanAddr = (t) => String(t || '').trim().replace(/^bitcoin:/i, '').split('?')[0].replace(/\s+/g, '');
 let vSeq = 0;
 async function revalidate() {
@@ -220,12 +232,14 @@ function renderAddr() {
   else if (ok) {
     msg.className = 'msg ok';
     msg.innerHTML = '';
-    const a = document.createElement('span'); a.className = 'ph'; a.textContent = '✓ 正しい形のアドレスです';
-    const b = document.createElement('span'); b.className = 'ph'; b.textContent = `（${SHORT_TYPE[V.type] || V.type}${V.network === 'main' ? '' : '・テスト用'}）`;
+    const a = document.createElement('span'); a.className = 'ph'; a.textContent = L('✓ 正しい形のアドレスです', '✓ Valid address');
+    const ty = SHORT_TYPE[V.type] ? L(SHORT_TYPE[V.type][0], SHORT_TYPE[V.type][1]) : V.type;
+    const b = document.createElement('span'); b.className = 'ph'; b.textContent = L(`（${ty}${V.network === 'main' ? '' : '・テスト用'}）`, `\u00a0(${ty}${V.network === 'main' ? '' : ' · test'})`);
     msg.append(a, b);
   } else {
     msg.className = 'msg ng';
-    msg.textContent = REASON_TEXT[(V && V.reason) || 'format'] || REASON_TEXT.format;
+    const R = L(REASON_TEXT, REASON_TEXT_EN);
+    msg.textContent = R[(V && V.reason) || 'format'] || R.format;
   }
 
   const ns = $('#net-seg');
@@ -238,8 +252,8 @@ function renderAddr() {
   $('#verify').hidden = !ok;
   if (ok) renderChips();
   renderName();
-  const ngText = !ok ? 'アドレスを貼り付けると進めます' : !okChips() ? 'すべて照合すると進めます' : '名前を短くすると進めます';
-  setNext($('#addr-next'), okAddr(), '次へ：NFCに書き込む', ngText);
+  const ngText = !ok ? L('アドレスを貼り付けると進めます', 'Paste an address to continue') : !okChips() ? L('すべて照合すると進めます', 'Match every chunk to continue') : L('名前を短くすると進めます', 'Shorten the name to continue');
+  setNext($('#addr-next'), okAddr(), L('次へ：NFCに書き込む', 'Next: NFC uplink'), ngText);
 }
 
 function renderChips() {
@@ -253,7 +267,7 @@ function renderChips() {
       b.className = 'chip';
       b.textContent = t;
       b.dataset.i = String(i);
-      b.setAttribute('aria-label', `${i + 1}番目、${t.split('').join(' ')}`);
+      b.setAttribute('aria-label', L(`${i + 1}番目、${t.split('').join(' ')}`, `Chunk ${i + 1}: ${t.split('').join(' ')}`));
       box.appendChild(b);
     });
     box.dataset.addr = V.address;
@@ -261,7 +275,7 @@ function renderChips() {
   $$('.chip', box).forEach((b, i) => b.setAttribute('aria-pressed', String(!!S.chips[i])));
   const n = S.chips.filter(Boolean).length;
   const c = $('#chip-count');
-  c.textContent = n === g.length ? `✓ 照合 ${n} / ${g.length}` : `照合 ${n} / ${g.length}`;
+  c.textContent = (n === g.length ? '✓ ' : '') + L(`照合 ${n} / ${g.length}`, `Matched ${n} / ${g.length}`);
   c.classList.toggle('all', n === g.length);
 }
 $('#chips').addEventListener('click', (e) => {
@@ -286,7 +300,7 @@ function renderName() {
     meter.classList.remove('over');
     inp.classList.remove('ng');
     msg.className = 'msg sub';
-    msg.textContent = 'コックピットの上に出ます。';
+    msg.textContent = L('コックピットとミッションパッチに出ます。', 'Shown on the cockpit and the mission patch.');
     return;
   }
   const used = ndefBytes(url());
@@ -299,13 +313,13 @@ function renderName() {
     let k = 0;
     while (k < chars.length && ndefBytes(omamoriUrl({ address: V.address, net: net(), name: chars.slice(0, chars.length - k).join('') }, BASE)) > TAG_BYTES) k++;
     msg.className = 'msg ng';
-    msg.textContent = `長すぎて、NFCタグに入りません。あと${k}文字ほど短くしてください。`;
+    msg.textContent = L(`長すぎて、NFCタグに入りません。あと${k}文字ほど短くしてください。`, `Too long for the NFC tag. Remove about ${k} more characters.`);
   } else {
     const room = nameRoom({ address: V.address, net: net(), name: S.name }, BASE);
     msg.className = 'msg sub';
     msg.textContent = S.name.trim()
-      ? `コックピットの上に出ます。あと${room}文字（日本語）まで入ります。`
-      : `コックピットの上に出ます。日本語なら${room}文字まで入ります。`;
+      ? L(`コックピットとミッションパッチに出ます。あと${room}文字（日本語）まで入ります。`, `Shown on the cockpit and the patch. Room for about ${room} more Japanese characters (more in English).`)
+      : L(`コックピットとミッションパッチに出ます。日本語なら${room}文字まで入ります。`, `Shown on the cockpit and the patch. Fits about ${room} Japanese characters (more in English).`);
   }
 }
 
@@ -335,7 +349,7 @@ $('#paste').addEventListener('click', async () => {
     save();
     if (await revalidate()) { save(); renderAddr(); }
   } catch {
-    toast('貼り付けできませんでした。欄を長押しして貼り付けてください');
+    toast(L('貼り付けできませんでした。欄を長押しして貼り付けてください', 'Couldn’t paste. Long-press the field to paste'));
     $('#addr').focus();
   }
 });
@@ -348,11 +362,11 @@ let nfcBusy = null; // かざすのを待っている操作
 let busyKind = '';
 let lockArmed = 0;
 const SUB = {
-  '': '押したら、コインをスマホの背面に当てて、そのまま待ちます。NFCの位置は機種によって違います。',
-  wait: 'コインをスマホの背面に当てて、動かさずに。もう一度押すと止めます。',
-  done: 'もう一度押すと、書き直せます（ロックするまで）。',
+  '': ['押したら、蓋をスマホの背面に当てて、そのまま待ちます。NFCの位置は機種によって違います。', 'Press, then hold the lid to the back of your phone and wait. The NFC spot varies by model.'],
+  wait: ['蓋をスマホの背面に当てて、動かさずに。もう一度押すと止めます。', 'Hold the lid to the back of the phone and keep still. Press again to stop.'],
+  done: ['もう一度押すと、書き直せます（ロックするまで）。', 'Press again to rewrite (until it’s locked).'],
 };
-const LOOK = { '': 'NFCに書き込む', wait: 'かざしてください', done: '書き込みました', fail: '書き込めませんでした' };
+const LOOK = { '': ['NFCに書き込む', 'Write NFC tag'], wait: ['かざしてください', 'Hold the lid to the phone'], done: ['書き込みました', 'Written'], fail: ['書き込めませんでした', 'Write failed'] };
 
 function stopNfc() {
   if (nfcBusy) nfcBusy.abort();
@@ -364,49 +378,64 @@ function setNfcLook(state, sub) {
   const w = $('#nfc-write');
   w.classList.remove('wait', 'done', 'fail');
   if (state) w.classList.add(state);
-  $('#nfc-text').textContent = LOOK[state];
-  $('#nfc-sr').textContent = state === 'wait' ? '書き込みを止める' : state === 'done' ? 'もう一度書き込む' : 'NFCに書き込む';
-  $('#nfc-sub').textContent = sub !== undefined ? sub : SUB[state] || SUB[''];
+  $('#nfc-text').textContent = L(...LOOK[state]);
+  $('#nfc-sr').textContent = state === 'wait' ? L('書き込みを止める', 'Stop writing') : state === 'done' ? L('もう一度書き込む', 'Write again') : L('NFCに書き込む', 'Write NFC tag');
+  $('#nfc-sub').textContent = sub !== undefined ? sub : L(...(SUB[state] || SUB['']));
 }
 
 function renderNfc() {
   const u = url();
   $('#url').textContent = u;
-  $('#url-size').textContent = `約${ndefBytes(u)} / ${TAG_BYTES}バイト`;
+  $('#url-size').textContent = L(`約${ndefBytes(u)} / ${TAG_BYTES}バイト`, `≈ ${ndefBytes(u)} / ${TAG_BYTES} bytes`);
   const android = S.os === 'android';
   const seg = $('#os-seg');
-  $('.seg-ind', seg).className = 'seg-ind ' + (android ? 'l' : 'r');
+  $('.seg-ind', seg).className = 'seg-ind ' + (android ? 'r' : 'l');
   $$('button', seg).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.os === S.os)));
   $('#os-android').hidden = !android;
   $('#os-iphone').hidden = android;
   const sup = NFC.nfcSupported();
-  $('#no-webnfc').hidden = sup;
+  $('#webnfc-more').hidden = !sup;
   $('#nfc-write').setAttribute('aria-disabled', String(!sup));
   if (!nfcBusy) setNfcLook(S.writtenUrl === u ? 'done' : '');
-  $('#ios-ck').setAttribute('aria-pressed', String(S.iosUrl === u));
+  $('#tap-ck').setAttribute('aria-pressed', String(S.tapUrl === u));
+  $('#share-url').hidden = !navigator.share;
+  uplinkSeen();
   renderAfter();
 }
+// コックピット（同じブラウザ）が、このアドレスで開かれたことがあるか
+function uplinkSeen() {
+  const ok = !!(V && V.ok && store.get('infinity:uplink:' + V.address.toLowerCase()));
+  $('#uplink-msg').hidden = !ok;
+  return ok;
+}
+window.addEventListener('storage', (e) => {
+  if (cur === 4 && e.key && e.key.startsWith('infinity:uplink:') && uplinkSeen()) {
+    vibrate([16, 40, 24]);
+    nudge($('#uplink-msg'));
+  }
+});
 
 function renderAfter() {
   const u = url();
   $('#nfc-after').hidden = S.writtenUrl !== u;
   const v = $('#nfc-verify');
   const l = $('#nfc-lock');
-  if (busyKind !== 'read') v.textContent = S.verifiedUrl === u ? 'もう一度読み取る' : '読み取って確かめる';
-  if (busyKind !== 'read' && S.verifiedUrl === u) { const m = $('#verify-msg'); m.className = 'msg ok'; m.textContent = '✓ 確かめました。このコインのURLが入っています。'; }
+  if (busyKind !== 'read') v.textContent = S.verifiedUrl === u ? L('もう一度読み取る', 'Read again') : L('読み取って確かめる', 'Read back to verify');
+  if (busyKind !== 'read' && S.verifiedUrl === u) { const m = $('#verify-msg'); m.className = 'msg ok'; m.textContent = L('✓ 確かめました。このケースのURLが入っています。', '✓ Verified. The tag holds this case’s URL.'); }
+  else if (busyKind !== 'read' && !$('#verify-msg').textContent) { const m = $('#verify-msg'); m.className = 'msg sub'; m.textContent = L('蓋をいったん離してから押し、もう一度当てます。', 'Move the lid away, press, then hold it to the phone again.'); }
   if (busyKind !== 'lock') {
     l.classList.remove('arm', 'good');
-    if (S.lockedUrl === u) { l.classList.add('good'); l.setAttribute('aria-disabled', 'false'); l.textContent = '✓ ロックしました'; }
-    else if (!NFC.lockSupported()) { l.setAttribute('aria-disabled', 'true'); l.textContent = 'このブラウザでは、ロックできません'; }
-    else if (S.verifiedUrl !== u) { l.setAttribute('aria-disabled', 'true'); l.textContent = '確かめると、ロックできます'; }
-    else if (lockArmed) { l.classList.add('arm'); l.setAttribute('aria-disabled', 'false'); l.textContent = 'もう一度押すとロック（取り消せません）'; }
-    else { l.setAttribute('aria-disabled', 'false'); l.textContent = '書き換えできないようにする'; }
+    if (S.lockedUrl === u) { l.classList.add('good'); l.setAttribute('aria-disabled', 'false'); l.textContent = L('✓ ロックしました', '✓ Locked'); }
+    else if (!NFC.lockSupported()) { l.setAttribute('aria-disabled', 'true'); l.textContent = L('このブラウザでは、ロックできません', 'This browser can’t lock tags'); }
+    else if (S.verifiedUrl !== u) { l.setAttribute('aria-disabled', 'true'); l.textContent = L('確かめると、ロックできます', 'Verify first to enable locking'); }
+    else if (lockArmed) { l.classList.add('arm'); l.setAttribute('aria-disabled', 'false'); l.textContent = L('もう一度押すとロック（取り消せません）', 'Press again to lock (permanent)'); }
+    else { l.setAttribute('aria-disabled', 'false'); l.textContent = L('書き換えできないようにする', 'Make it read-only'); }
   }
-  setNext($('#nfc-next'), okNfc(), '次へ：封印する', '書き込むと進めます');
+  setNext($('#nfc-next'), okNfc(), L('次へ：封印する', 'Next: seal it'), L('書き込んで確かめると進めます', 'Write and test the tag to continue'));
 }
 
 $('#nfc-write').addEventListener('click', async () => {
-  if (!NFC.nfcSupported()) { nudge($('#no-webnfc')); return; }
+  if (!NFC.nfcSupported()) { nudge($('#nfc-write')); return; }
   if (nfcBusy) { if (busyKind === 'write') nfcBusy.abort(); return; }
   const u = url();
   if (!u) return;
@@ -422,7 +451,7 @@ $('#nfc-write').addEventListener('click', async () => {
     setNfcLook('done');
     const m = $('#verify-msg');
     m.className = 'msg sub';
-    m.textContent = 'コインをいったん離してから押し、もう一度当てます。';
+    m.textContent = L('蓋をいったん離してから押し、もう一度当てます。', 'Move the lid away, press, then hold it to the phone again.');
   } catch (e) {
     if (e && e.name === 'AbortError') setNfcLook(S.writtenUrl === u ? 'done' : '');
     else setNfcLook('fail', NFC.errorText(e, 'write'));
@@ -440,9 +469,9 @@ $('#nfc-verify').addEventListener('click', async () => {
   const msg = $('#verify-msg');
   nfcBusy = new AbortController();
   busyKind = 'read';
-  btn.textContent = 'かざしてください（押すと止める）';
+  btn.textContent = L('かざしてください（押すと止める）', 'Hold the lid to the phone (press to stop)');
   msg.className = 'msg sub';
-  msg.textContent = 'コインを、スマホの背面にもう一度当てます。';
+  msg.textContent = L('蓋を、スマホの背面にもう一度当てます。', 'Hold the lid to the back of the phone again.');
   try {
     const r = await NFC.readUrlOnce({ signal: nfcBusy.signal });
     if (r.urls.some((x) => NFC.sameUrl(x, u))) {
@@ -454,12 +483,12 @@ $('#nfc-verify').addEventListener('click', async () => {
       save();
       msg.className = 'msg ng';
       msg.textContent = r.urls.length
-        ? `別のURLが入っています（${r.urls[0].slice(0, 48)}…）。もう一度書き込んでください。`
-        : 'URLが入っていません。もう一度書き込んでください。';
+        ? L(`別のURLが入っています（${r.urls[0].slice(0, 48)}…）。もう一度書き込んでください。`, `A different URL is on the tag (${r.urls[0].slice(0, 48)}…). Write it again.`)
+        : L('URLが入っていません。もう一度書き込んでください。', 'No URL on the tag. Write it again.');
     }
   } catch (e) {
     msg.className = e && e.name === 'AbortError' ? 'msg sub' : 'msg ng';
-    msg.textContent = e && e.name === 'AbortError' ? '読み取りを止めました。' : NFC.errorText(e, 'read');
+    msg.textContent = e && e.name === 'AbortError' ? L('読み取りを止めました。', 'Stopped reading.') : NFC.errorText(e, 'read');
   } finally {
     nfcBusy = null;
     busyKind = '';
@@ -483,13 +512,13 @@ $('#nfc-lock').addEventListener('click', async () => {
   nfcBusy = new AbortController();
   busyKind = 'lock';
   btn.classList.add('arm');
-  btn.textContent = 'かざしてください（押すと止める）';
+  btn.textContent = L('かざしてください（押すと止める）', 'Hold the lid to the phone (press to stop)');
   try {
     await NFC.lockTag({ signal: nfcBusy.signal });
     S.lockedUrl = u;
     save();
     vibrate([20, 50, 20]);
-    toast('ロックしました');
+    toast(L('ロックしました', 'Locked'));
   } catch (e) {
     if (!(e && e.name === 'AbortError')) toast(NFC.errorText(e, 'lock'));
   } finally {
@@ -509,24 +538,27 @@ $$('#os-seg button').forEach((b) => b.addEventListener('click', () => {
 $('#copy-url').addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(url());
-    toast('URLをコピーしました');
+    toast(L('URLをコピーしました。NFC Tools に貼り付けます', 'URL copied. Paste it into NFC Tools'));
   } catch {
     const r = document.createRange();
     r.selectNodeContents($('#url'));
     const sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(r);
-    toast('URLを長押ししてコピーしてください');
+    toast(L('URLを長押ししてコピーしてください', 'Long-press the URL to copy it'));
   }
 });
-$('#ios-ck').addEventListener('click', () => {
+$('#share-url').addEventListener('click', async () => {
+  try { await navigator.share({ url: url() }); } catch { /* やめても続ける */ }
+});
+$('#tap-ck').addEventListener('click', () => {
   const u = url();
-  S.iosUrl = S.iosUrl === u ? '' : u;
+  S.tapUrl = S.tapUrl === u ? '' : u;
   save();
   renderNfc();
 });
 
-// ── 5 封印する（長押しで、封印シールがコインに降りる）
+// ── 5 封印する（長押しで、セキュリティシールがケースの側面に降りる）
 const hold = $('#hold');
 const scene = $('#scene');
 let holdRaf = 0;
@@ -545,9 +577,9 @@ function renderSeal() {
   scene.style.setProperty('--p', holdDone ? '1' : '0');
   $('#hold-prog').style.strokeDasharray = holdDone ? `${RING} ${RING}` : `0 ${RING}`;
   hold.setAttribute('aria-disabled', String(holdDone));
-  $('#hold-text').textContent = holdDone ? '封じました' : '封印シールを貼ったら、長押しで封じる';
-  $('#hold-sub').textContent = holdDone ? '' : '押しつづけると、輪が一周して封じます';
-  $('#hold-alt').textContent = holdDone ? '次へ：封じました' : '長押しせずに封じる';
+  $('#hold-text').textContent = holdDone ? L('封じました', 'Sealed') : L('シールを貼ったら、長押しで封じる', 'After applying the seal, press and hold');
+  $('#hold-sub').textContent = holdDone ? '' : L('押しつづけると、輪が一周して封じます', 'Keep holding until the ring closes');
+  $('#hold-alt').textContent = holdDone ? L('次へ：封じました', 'Next: sealed') : L('長押しせずに封じる', 'Seal without holding');
 }
 function holdBegin() {
   if (holdDone || holdT0) return;
@@ -586,9 +618,9 @@ function holdComplete() {
   scene.style.setProperty('--p', '1');
   hold.setAttribute('aria-disabled', 'true');
   $('#hold-prog').style.strokeDasharray = `${RING} ${RING}`;
-  $('#hold-text').textContent = '封じました';
+  $('#hold-text').textContent = L('封じました', 'Sealed');
   $('#hold-sub').textContent = '';
-  $('#hold-alt').textContent = '次へ：封じました';
+  $('#hold-alt').textContent = L('次へ：封じました', 'Next: sealed');
   vibrate([18, 40, 30]);
   setTimeout(() => { if (cur === 5) go(6); }, prefersReducedMotion() ? 300 : 1700);
 }
@@ -606,11 +638,7 @@ $('#hold-alt').addEventListener('click', () => { if (holdDone) go(6); else holdC
 
 // ── 6 封じました
 function renderDone() {
-  $('#pv-em').innerHTML = SG.empty({ id: 'pv' });
-  const nm = S.name.trim();
-  const pn = $('#pv-name');
-  pn.hidden = !nm;
-  pn.textContent = nm;
+  $('#pv-em').innerHTML = SG.empty({ id: 'pv', name: S.name.trim() });
   $('#open-m').href = url() || '../m/';
 }
 $('#show-qr').addEventListener('click', () => {
@@ -620,8 +648,8 @@ $('#show-qr').addEventListener('click', () => {
   openSheet('#qr-sheet');
 });
 $('#copy-addr').addEventListener('click', async () => {
-  try { await navigator.clipboard.writeText(V.address); toast('アドレスをコピーしました'); }
-  catch { toast('コピーできませんでした。長押しで選んでください'); }
+  try { await navigator.clipboard.writeText(V.address); toast(L('アドレスをコピーしました', 'Address copied')); }
+  catch { toast(L('コピーできませんでした。長押しで選んでください', 'Couldn’t copy. Long-press to select it')); }
 });
 $('#again').addEventListener('click', () => { reset(); go(0); });
 
@@ -655,6 +683,9 @@ function toast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('on'), 2600);
 }
+
+// ── 言語が変わったら、いまの工程を書き直す
+onLang(() => { if (cur >= 0) enter(cur); });
 
 // ── はじめる
 async function init() {

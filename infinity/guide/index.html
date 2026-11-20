@@ -6,12 +6,13 @@
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="theme-color" content="#030507">
-<meta name="description" content="INFINITY のコインの中のsatsを、自分のウォレットへ移す手順。鍵の入力は、お使いのウォレットの中だけで行います。">
-<title>RETURN ── 帰還の手順 ── INFINITY</title>
+<meta name="description" content="INFINITY のHODLケースの中のsatsを、自分のウォレットへ移す手順。鍵の入力は、お使いのウォレットの中だけで行います。" data-l-content="INFINITY のHODLケースの中のsatsを、自分のウォレットへ移す手順。鍵の入力は、お使いのウォレットの中だけで行います。|How to move the sats in an INFINITY HODL case to your own wallet. You only ever enter the key inside your wallet app.">
+<title data-l="RETURN ── 帰還の手順 ── INFINITY|RETURN — Return guide — INFINITY">RETURN ── 帰還の手順 ── INFINITY</title>
+<script src="../assets/js/lang-boot.js"></script>
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Zen+Kaku+Gothic+New:wght@400;500;700;900&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Zen+Kaku+Gothic+New:wght@400;500;700;900&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap">
 <link rel="stylesheet" href="../assets/app.css">
 <link rel="stylesheet" href="../setup/setup.css">
 <link rel="stylesheet" href="guide.css">
@@ -19,79 +20,80 @@
 <body class="stars">
 <div class="app">
   <header class="top">
-    <a class="logo" href="../" aria-label="INFINITY トップへ"><svg viewBox="0 0 64 32" aria-hidden="true"><path d="M32 16c-6-8-10-11-16-11a11 11 0 0 0 0 22c6 0 10-3 16-11zm0 0c6 8 10 11 16 11a11 11 0 0 0 0-22c-6 0-10 3-16 11z"/><circle cx="16" cy="16" r="4.2"/><circle cx="48" cy="16" r="4.2"/></svg><span>INFINITY</span></a>
-    <span class="label top-label">RETURN · 帰還の手順</span>
+    <a class="logo" href="../" data-l-aria-label="INFINITY トップへ|INFINITY home"><svg viewBox="0 0 64 32" aria-hidden="true"><path d="M32 16c-6-8-10-11-16-11a11 11 0 0 0 0 22c6 0 10-3 16-11zm0 0c6 8 10 11 16 11a11 11 0 0 0 0-22c-6 0-10 3-16 11z"/><circle cx="16" cy="16" r="4.2"/><circle cx="48" cy="16" r="4.2"/></svg><span>INFINITY</span></a>
+    <span class="label top-label">RETURN</span>
+    <button type="button" class="lang-tg" data-lang-toggle><i class="l-ja">JA</i><i class="sep">/</i><i class="l-en">EN</i></button>
   </header>
 
   <main class="main">
     <article class="step gd">
-      <p class="label kicker">RETURN SEQUENCE · 帰還の手順</p>
-      <h1 class="h"><span class="ph">コインのsatsを、</span><span class="ph">自分のウォレットへ。</span></h1>
-      <p class="lead">札の鍵を、あなたのウォレットアプリに読み込んで送ります。鍵を入れるのは、ウォレットアプリの中だけ。このサイトや販売者が鍵を受け取ることはありません。</p>
+      <p class="label kicker">RETURN SEQUENCE · <span class="ja">帰還の手順</span><span class="en">Return guide</span></p>
+      <h1 class="h rv"><span class="ja"><span class="ph">ケースのsatsを、</span><span class="ph">自分のウォレットへ。</span></span><span class="en">Bring the sats home to your wallet.</span></h1>
+      <p class="lead rv"><span class="ja">札の鍵を、あなたのウォレットアプリに読み込んで送ります。鍵を入れるのは、ウォレットアプリの中だけ。このサイトや販売者が鍵を受け取ることはありません。</span><span class="en">You load the slip’s key into your own wallet app and send the funds. The key only ever goes into your wallet app — neither this site nor the seller ever receives it.</span></p>
 
-      <div class="warn-box brk" role="note">
+      <div class="warn-box brk rv" role="note">
         <span class="label">WARNING</span>
-        <strong>12語や秘密鍵を、ウェブサイトに入力しないでください</strong>
-        <p>鍵や12語の入力を求めるページ、聞き出そうとする人は、詐欺です。サポートを名乗る連絡にも答えないでください。このサイトも販売者も、尋ねることはありません。</p>
+        <strong><span class="ja">12語や秘密鍵を、ウェブサイトに入力しないでください</span><span class="en">Never type the 12 words or private key into a website</span></strong>
+        <p><span class="ja">鍵や12語の入力を求めるページ、聞き出そうとする人は、詐欺です。サポートを名乗る連絡にも答えないでください。このサイトも販売者も、尋ねることはありません。</span><span class="en">Any page asking for a key or 12 words, or anyone trying to get them from you, is a scam — including messages claiming to be support. Neither this site nor the seller will ever ask.</span></p>
       </div>
 
-      <section class="card brk" aria-labelledby="g-before">
-        <h2 class="card-h label" id="g-before">PRE-FLIGHT · 開ける前に</h2>
+      <section class="card brk rv" aria-labelledby="g-before">
+        <h2 class="card-h label" id="g-before">PRE-FLIGHT · <span class="ja">開ける前に</span><span class="en">Before opening</span></h2>
         <ul class="need">
-          <li>コインをかざして、残高と紋（特異点）を確かめる。</li>
-          <li>送り先にする、あなたのふだんのウォレットの「受け取る」アドレスを用意する。</li>
-          <li>人のいない場所で開ける。札を写真に撮らない、人に見せない。</li>
+          <li><span class="ja">蓋をスマホにかざして、残高とミッションパッチを確かめる。</span><span class="en">Tap the lid with your phone to check the balance and the mission patch.</span></li>
+          <li><span class="ja">送り先にする、あなたのふだんのウォレットの「受け取る」アドレスを用意する。</span><span class="en">Have your everyday wallet’s “Receive” address ready as the destination.</span></li>
+          <li><span class="ja">人のいない場所で開ける。札を写真に撮らない、人に見せない。</span><span class="en">Open it somewhere private. Don’t photograph the slip or show it to anyone.</span></li>
         </ul>
       </section>
 
-      <div class="seg" id="kind-seg" role="group" aria-label="札に書かれている形">
+      <div class="seg rv" id="kind-seg" role="group" data-l-aria-label="札に書かれている形|What’s on the slip">
         <span class="seg-ind l" aria-hidden="true"></span>
-        <button type="button" data-kind="seed" aria-pressed="true">12語のとき</button>
-        <button type="button" data-kind="key" aria-pressed="false">秘密鍵のとき</button>
+        <button type="button" data-kind="seed" aria-pressed="true"><span class="ja">12語のとき</span><span class="en">12 words</span></button>
+        <button type="button" data-kind="key" aria-pressed="false"><span class="ja">秘密鍵のとき</span><span class="en">Private key</span></button>
       </div>
 
-      <section class="panel brk" id="k-seed" aria-label="12語のときの手順">
+      <section class="panel brk" id="k-seed" data-l-aria-label="12語のときの手順|Steps for 12 words">
         <ol class="how">
-          <li>封印シールをはがし、札を取り出します。</li>
-          <li>ウォレットアプリで「ウォレットを復元」（「インポート」）を選び、札の12語を入れます。札にウォレットの名前やアドレスの種類（bc1q など）が書いてあれば、同じものを選びます。</li>
-          <li>復元したウォレットに、コインと同じ残高が出るのを確かめます。出ないときは、アドレスの種類（導出の形）が違うかもしれません。札に書かれた種類を選び直してください。</li>
-          <li>「送る」で、ふだんのウォレットのアドレス宛てに、全額を送ります（「最大」「全額」などのボタン）。手数料は、ウォレットが示します。</li>
-          <li>承認されると、コインの紋が「超立方体」に変わります。</li>
+          <li><span class="ja">側面のセキュリティシールをはがし、蓋をスライドして札を取り出します。</span><span class="en">Peel off the security seal on the side, slide the lid open, and take out the slip.</span></li>
+          <li><span class="ja">ウォレットアプリで「ウォレットを復元」（「インポート」）を選び、札の12語を入れます。札にウォレットの名前やアドレスの種類（bc1q など）が書いてあれば、同じものを選びます。</span><span class="en">In your wallet app choose “Restore wallet” (or “Import”) and enter the 12 words. If the slip names a wallet or an address type (e.g. bc1q), choose the same.</span></li>
+          <li><span class="ja">復元したウォレットに、ケースと同じ残高が出るのを確かめます。出ないときは、アドレスの種類（導出の形）が違うかもしれません。札に書かれた種類を選び直してください。</span><span class="en">Check that the restored wallet shows the same balance as the case. If not, the address type (derivation) may differ — pick the type written on the slip.</span></li>
+          <li><span class="ja">「送る」で、ふだんのウォレットのアドレス宛てに、全額を送ります（「最大」「全額」などのボタン）。手数料は、ウォレットが示します。</span><span class="en">Use “Send” to move the full amount to your everyday wallet’s address (a “Max” or “Send all” button). Your wallet shows the fee.</span></li>
+          <li><span class="ja">承認されると、ミッションパッチが「超越」の姿に変わります。</span><span class="en">Once confirmed, the mission patch turns into its “Transcended” form.</span></li>
         </ol>
       </section>
-      <section class="panel brk" id="k-key" aria-label="秘密鍵のときの手順" hidden>
+      <section class="panel brk" id="k-key" data-l-aria-label="秘密鍵のときの手順|Steps for a private key" hidden>
         <ol class="how">
-          <li>封印シールをはがし、札を取り出します。</li>
-          <li>秘密鍵を読み込める（「スイープ」「インポート」ができる）ウォレットアプリで、札の秘密鍵を入れます。</li>
-          <li>読み込んだ鍵に、コインと同じ残高が出るのを確かめます。</li>
-          <li>ふだんのウォレットのアドレス宛てに、全額を送ります。スイープの場合は、読み込んだウォレットへそのまま移ります。</li>
-          <li>承認されると、コインの紋が「超立方体」に変わります。</li>
+          <li><span class="ja">側面のセキュリティシールをはがし、蓋をスライドして札を取り出します。</span><span class="en">Peel off the security seal on the side, slide the lid open, and take out the slip.</span></li>
+          <li><span class="ja">秘密鍵を読み込める（「スイープ」「インポート」ができる）ウォレットアプリで、札の秘密鍵を入れます。</span><span class="en">Enter the slip’s private key into a wallet app that can “sweep” or “import” keys.</span></li>
+          <li><span class="ja">読み込んだ鍵に、ケースと同じ残高が出るのを確かめます。</span><span class="en">Check that the imported key shows the same balance as the case.</span></li>
+          <li><span class="ja">ふだんのウォレットのアドレス宛てに、全額を送ります。スイープの場合は、読み込んだウォレットへそのまま移ります。</span><span class="en">Send the full amount to your everyday wallet. A sweep moves it straight into the importing wallet.</span></li>
+          <li><span class="ja">承認されると、ミッションパッチが「超越」の姿に変わります。</span><span class="en">Once confirmed, the mission patch turns into its “Transcended” form.</span></li>
         </ol>
       </section>
 
-      <section class="card brk" aria-labelledby="g-fee">
-        <h2 class="card-h label" id="g-fee">FEE · 手数料のこと</h2>
-        <p class="p">送るときに、オンチェーンの手数料がかかります。コインをかざしたコックピットの「受け取った方へ」→「開けて、自分のウォレットへ移す」で、いまのめやす（mempool.space の推奨値から計算）を見られます。実際の手数料は、お使いのウォレットで決まります。急がなければ、手数料を低めにして送ることもできます（承認まで時間がかかります）。</p>
+      <section class="card brk rv" aria-labelledby="g-fee">
+        <h2 class="card-h label" id="g-fee">FEE · <span class="ja">手数料のこと</span><span class="en">About fees</span></h2>
+        <p class="p"><span class="ja">送るときに、オンチェーンの手数料がかかります。蓋にかざしたコックピットの「受け取った方へ」→「開けて、自分のウォレットへ移す」で、いまのめやす（mempool.space の推奨値から計算）を見られます。実際の手数料は、お使いのウォレットで決まります。急がなければ、手数料を低めにして送ることもできます（承認まで時間がかかります）。</span><span class="en">Sending costs an on-chain fee. In the cockpit (tap the lid), “For the recipient” → “Open it and move it to your wallet” shows a current estimate based on mempool.space’s recommended rates. The actual fee is set in your wallet. If you’re not in a hurry, a lower fee works too — it just takes longer to confirm.</span></p>
       </section>
 
-      <section class="card brk" aria-labelledby="g-after">
-        <h2 class="card-h label" id="g-after">AFTER · 移したあと</h2>
+      <section class="card brk rv" aria-labelledby="g-after">
+        <h2 class="card-h label" id="g-after">AFTER · <span class="ja">移したあと</span><span class="en">After moving</span></h2>
         <ul class="need">
-          <li>移し終えたら、札の鍵は使わないでください。贈り主も控えを持っている場合があります。</li>
-          <li>紋は記録として残り、かざせばいつでも見られます。</li>
-          <li>もう一度使うなら、新しい鍵で封じ直します（<a href="../setup/">打ち上げの手順</a>）。タグをロックしている場合は書き換えられないため、そのコインは記念としてお持ちください。</li>
+          <li><span class="ja">移し終えたら、札の鍵は使わないでください。贈り主も控えを持っている場合があります。</span><span class="en">Once moved, stop using the slip’s key. The giver may also have a copy.</span></li>
+          <li><span class="ja">ミッションパッチは記録として残り、かざせばいつでも見られます。</span><span class="en">The mission patch stays on record — tap the lid any time to see it.</span></li>
+          <li><span class="ja">もう一度使うなら、新しい鍵で封じ直します（<a href="../setup/">打ち上げの手順</a>）。タグをロックしている場合は書き換えられないため、そのケースは記念としてお持ちください。</span><span class="en">To reuse the case, seal it again with a new key (<a href="../setup/">launch sequence</a>). If the tag is locked it can’t be rewritten, so keep that case as a keepsake.</span></li>
         </ul>
       </section>
       <div class="nav">
-        <a class="btn primary wide" href="../m/#demo">見本のコックピットを見る</a>
-        <a class="link-btn" href="../">INFINITY のページへ</a>
+        <a class="btn primary wide" href="../m/#demo"><span class="ja">見本のコックピットを見る</span><span class="en">See the demo cockpit</span></a>
+        <a class="link-btn" href="../"><span class="ja">INFINITY のページへ</span><span class="en">About INFINITY</span></a>
       </div>
     </article>
   </main>
 
   <footer class="foot">
     <span class="led" aria-hidden="true"></span>
-    <p>このサイトが秘密鍵や12語を尋ねることはありません</p>
+    <p><span class="ja">このページはどこにも通信しません。秘密鍵や12語を尋ねることもありません</span><span class="en">This page never connects to any server, and never asks for your private key or 12 words</span></p>
   </footer>
 </div>
 <script type="module" src="../assets/js/guide.js"></script>

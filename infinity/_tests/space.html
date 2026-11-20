@@ -1,7 +1,19 @@
 <!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%;background:#000}canvas{width:100vw;height:100vh;display:block}</style></head>
 <body><canvas id="c"></canvas><script type="module">
-import { mountSpace } from '../assets/js/space.js';
-const s = mountSpace(document.getElementById('c'), { quality: 0.9, shift: (w) => (w > 1.2 ? 0.32 : 0), zoom: (w) => (w > 1.2 ? 1 : 0.8), onError: (e) => console.error('GL', e.message) });
+import { mountSpace, view } from '../assets/js/space.js';
+const q = new URLSearchParams(location.hash.slice(1));
+const num = (k, d) => (q.has(k) ? Number(q.get(k)) : d);
+const s = mountSpace(document.getElementById('c'), { quality: num('ql', 0.9), onError: (e) => console.error('GL', e.message) });
 window.__ok = !!s;
-if (s) s.setSeed([60, 128, 1, 100]);
+if (s) {
+  s.setSeed([60, 128, 1, 100]);
+  const F = num('F', 1.05), alt = num('alt', 0.085), yh = num('yh', -0.17);
+  const delta = Math.acos(1 / (1 + alt));
+  const pitch = delta + Math.atan(yh / F);
+  const P = { shift: [0, 0], roll: num('roll', 0), F, pitch };
+  const bh = view.dir([num('bx', 0.22), num('by', 0.1)], P);
+  const sun = (q.get('sun') || '-0.62,0.42,0.66').split(',').map(Number);
+  s.set({ F, pitch, roll: P.roll, bh, bhScale: num('s', 0.6), earth: [alt, 0, num('spin', 0.0045), 1], sun });
+  if (q.has('t')) { s.stop(); }
+}
 </script></body></html>

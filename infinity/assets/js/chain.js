@@ -1,4 +1,4 @@
-// ブロックチェーンの公開データから、コインの状態を決める
+// ブロックチェーンの公開データから、ケースの状態を決める
 // 読むのは公開APIだけ（mempool.space、つながらないときは blockstream.info）。鍵は扱わない。
 
 export const NETS = {
@@ -40,7 +40,7 @@ async function getJSON(bases, path, { timeout = 9000, fetchImpl = fetch } = {}) 
 const paysTo = (tx, address) => tx.vout.map((o, i) => ({ ...o, n: i })).filter((o) => o.scriptpubkey_address === address);
 
 /**
- * コインの状態を読む
+ * ケースの状態を読む
  * 状態: empty（空）/ gathering（入金を確認中）/ sealed（保管中）/ rumbling（移動を確認中）/ released（移動済み）
  * 最初の入金 ＝ このアドレスへ支払った、承認済みの取引のうち、最も早いブロックのもの
  * 移動 ＝ 最初の入金でこのアドレスに入った出力を使った取引

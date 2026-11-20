@@ -146,3 +146,10 @@ export const REASON_TEXT = {
   regtest: '開発用（regtest）のアドレスには対応していません',
   future: 'まだ使われていない種類のアドレスです',
 };
+export const REASON_TEXT_EN = {
+  empty: 'Paste an address',
+  checksum: 'One character is off, or it was cut short. Paste it again from your wallet',
+  format: 'This isn’t a Bitcoin address',
+  regtest: 'Development (regtest) addresses aren’t supported',
+  future: 'This address type isn’t in use yet',
+};

@@ -6,72 +6,74 @@
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="theme-color" content="#030507">
-<meta name="description" content="INFINITY の打ち上げの手順。鍵をつくって札に書き、受取アドレスを照合して、NFCに書き込み、封印します。">
-<title>LAUNCH SEQUENCE ── INFINITY</title>
+<meta name="description" content="INFINITY の打ち上げの手順。鍵をつくって札に書き、受取アドレスを照合して、NFC Tools で蓋のタグに書き込み、封印します。" data-l-content="INFINITY の打ち上げの手順。鍵をつくって札に書き、受取アドレスを照合して、NFC Tools で蓋のタグに書き込み、封印します。|INFINITY launch sequence: create a key and write the slip, check the receive address, write the lid’s tag with NFC Tools, and seal the case.">
+<title data-l="LAUNCH SEQUENCE ── INFINITY|LAUNCH SEQUENCE — INFINITY">LAUNCH SEQUENCE ── INFINITY</title>
+<script src="../assets/js/lang-boot.js"></script>
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Zen+Kaku+Gothic+New:wght@400;500;700;900&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Zen+Kaku+Gothic+New:wght@400;500;700;900&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap">
 <link rel="stylesheet" href="../assets/app.css">
 <link rel="stylesheet" href="setup.css">
 </head>
 <body class="stars">
 <div class="app" id="app">
   <header class="top">
-    <a class="logo" href="../" aria-label="INFINITY トップへ"><svg viewBox="0 0 64 32" aria-hidden="true"><path d="M32 16c-6-8-10-11-16-11a11 11 0 0 0 0 22c6 0 10-3 16-11zm0 0c6 8 10 11 16 11a11 11 0 0 0 0-22c-6 0-10 3-16 11z"/><circle cx="16" cy="16" r="4.2"/><circle cx="48" cy="16" r="4.2"/></svg><span>INFINITY</span></a>
+    <a class="logo" href="../" data-l-aria-label="INFINITY トップへ|INFINITY home"><svg viewBox="0 0 64 32" aria-hidden="true"><path d="M32 16c-6-8-10-11-16-11a11 11 0 0 0 0 22c6 0 10-3 16-11zm0 0c6 8 10 11 16 11a11 11 0 0 0 0-22c-6 0-10 3-16 11z"/><circle cx="16" cy="16" r="4.2"/><circle cx="48" cy="16" r="4.2"/></svg><span>INFINITY</span></a>
     <span class="label top-label" id="top-label">LAUNCH SEQUENCE</span>
-    <div class="dots" id="dots" aria-hidden="true" hidden><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="chainbar" id="dots" aria-hidden="true" hidden><i></i><i></i><i></i><i></i><i></i></div>
+    <button type="button" class="lang-tg" data-lang-toggle><i class="l-ja">JA</i><i class="sep">/</i><i class="l-en">EN</i></button>
   </header>
 
   <main class="main">
 
     <!-- 0 はじめに -->
     <section class="step" id="s0" data-step="0" aria-labelledby="h0">
-      <p class="label kicker">LAUNCH SEQUENCE · 打ち上げの手順</p>
-      <h1 class="h" id="h0" tabindex="-1"><span class="ph">あなたのコインを、</span><span class="ph">打ち上げる。</span></h1>
-      <p class="lead">鍵をつくるのも、封をするのも、あなたの手元だけ。このサイトが扱うのは、公開の受取アドレスだけです。</p>
+      <p class="label kicker">LAUNCH SEQUENCE · <span class="ja">打ち上げの手順</span><span class="en">5 STEPS</span></p>
+      <h1 class="h" id="h0" tabindex="-1"><span class="ja"><span class="ph">あなたの</span><span class="ph">HODLケースを、</span><span class="ph">打ち上げる。</span></span><span class="en">Launch your HODL case.</span></h1>
+      <p class="lead"><span class="ja">鍵をつくるのも、封をするのも、あなたの手元だけ。このサイトが扱うのは、公開の受取アドレスだけです。このページは、どこにも通信しません。</span><span class="en">Creating the key and sealing the case happen only in your hands. This site handles nothing but a public receive address — and this page never connects to any server.</span></p>
       <ol class="plan">
-        <li style="--i:0"><b class="num">T−5</b><span><strong>鍵をつくり、札に書く</strong><small>ウォレットで、このコイン専用の鍵を</small></span></li>
-        <li style="--i:1"><b class="num">T−4</b><span><strong>札を確かめる</strong><small>書いた札から、同じアドレスになるか</small></span></li>
-        <li style="--i:2"><b class="num">T−3</b><span><strong>座標を照合する</strong><small>受取アドレスを、4文字ずつ指で</small></span></li>
-        <li style="--i:3"><b class="num">T−2</b><span><strong>NFCに書き込む</strong><small>かざすと、このコインのコックピットが開くように</small></span></li>
-        <li style="--i:4"><b class="num">T−1</b><span><strong>封印する</strong><small>札を納めて、封印シールを</small></span></li>
+        <li style="--i:0"><b class="num">T−5</b><span><strong><span class="ja">鍵をつくり、札に書く</span><span class="en">Create a key, write the slip</span></strong><small><span class="ja">ウォレットで、このケース専用の鍵を</span><span class="en">A key just for this case, in your wallet</span></small></span></li>
+        <li style="--i:1"><b class="num">T−4</b><span><strong><span class="ja">札を確かめる</span><span class="en">Verify the slip</span></strong><small><span class="ja">書いた札から、同じアドレスになるか</span><span class="en">Does the slip restore the same address?</span></small></span></li>
+        <li style="--i:2"><b class="num">T−3</b><span><strong><span class="ja">座標を照合する</span><span class="en">Lock the coordinates</span></strong><small><span class="ja">受取アドレスを、4文字ずつ指で</span><span class="en">Check the address four characters at a time</span></small></span></li>
+        <li style="--i:3"><b class="num">T−2</b><span><strong><span class="ja">NFCに書き込む</span><span class="en">NFC uplink</span></strong><small><span class="ja">NFC Tools で、蓋のタグにURLを</span><span class="en">Write the URL to the lid’s tag with NFC Tools</span></small></span></li>
+        <li style="--i:4"><b class="num">T−1</b><span><strong><span class="ja">封印する</span><span class="en">Seal</span></strong><small><span class="ja">札を納めて、側面にセキュリティシール</span><span class="en">Slip inside, security seal on the side</span></small></span></li>
       </ol>
       <div class="card brk">
-        <h2 class="card-h label">PAYLOAD · 用意するもの</h2>
+        <h2 class="card-h label">PAYLOAD · <span class="ja">用意するもの</span><span class="en">What you need</span></h2>
         <ul class="need">
-          <li>INFINITY のキット（コイン・札・封印シール）</li>
-          <li>ウォレットアプリの入ったスマホ</li>
-          <li>油性の細いペン</li>
-          <li>NFCに書き込めるスマホ（Android は、このページから。iPhone は、書き込み用のアプリで）</li>
+          <li><span class="ja">INFINITY のキット（HODLケース・札・セキュリティシール）</span><span class="en">The INFINITY kit (HODL case, slip, security seal)</span></li>
+          <li><span class="ja">ウォレットアプリの入ったスマホ</span><span class="en">A phone with a wallet app</span></li>
+          <li><span class="ja">油性の細いペン</span><span class="en">A fine permanent pen</span></li>
+          <li><span class="ja">NFCに対応したスマホと、無料アプリ「NFC Tools」（iPhone 7 以降・NFC付きの Android）</span><span class="en">An NFC phone with the free “NFC Tools” app (iPhone 7 or later, or an Android phone with NFC)</span></li>
         </ul>
       </div>
       <div class="nav">
-        <button type="button" class="btn wide" id="resume" hidden>続きから</button>
-        <button type="button" class="btn primary wide" id="start">はじめる</button>
-        <button type="button" class="link-btn" id="restart" hidden>最初からはじめる</button>
+        <button type="button" class="btn wide" id="resume" hidden><span class="ja">続きから</span><span class="en">Resume</span></button>
+        <button type="button" class="btn primary wide" id="start"><span class="ja">はじめる</span><span class="en">Start</span></button>
+        <button type="button" class="link-btn" id="restart" hidden><span class="ja">最初からはじめる</span><span class="en">Start over</span></button>
       </div>
     </section>
 
     <!-- 1 鍵 -->
     <section class="step" id="s1" data-step="1" aria-labelledby="h1" hidden>
       <p class="label kicker">T−5 · KEYGEN</p>
-      <h2 class="h" id="h1" tabindex="-1">鍵をつくり、札に書く</h2>
-      <p class="lead">お使いのウォレットアプリで、このコイン専用の鍵をつくります。札に書く形を選んでください。</p>
-      <div class="seg" id="method-seg" role="group" aria-label="札に書く形">
+      <h2 class="h" id="h1" tabindex="-1"><span class="ja">鍵をつくり、札に書く</span><span class="en">Create a key, write the slip</span></h2>
+      <p class="lead"><span class="ja">お使いのウォレットアプリで、このケース専用の鍵をつくります。札に書く形を選んでください。</span><span class="en">Use your wallet app to create a key just for this case. Choose what goes on the slip.</span></p>
+      <div class="seg" id="method-seg" role="group" data-l-aria-label="札に書く形|What goes on the slip">
         <span class="seg-ind l" aria-hidden="true"></span>
-        <button type="button" data-method="seed" aria-pressed="true">12語（おすすめ）</button>
-        <button type="button" data-method="key" aria-pressed="false">秘密鍵</button>
+        <button type="button" data-method="seed" aria-pressed="true"><span class="ja">12語（おすすめ）</span><span class="en">12 words (recommended)</span></button>
+        <button type="button" data-method="key" aria-pressed="false"><span class="ja">秘密鍵</span><span class="en">Private key</span></button>
       </div>
       <div class="panel brk" id="m-seed">
         <ol class="how">
-          <li>ウォレットアプリで、<b>新しいウォレット</b>をつくります。ふだん使いのウォレットとは分けてください。</li>
-          <li>表示された<b>12語</b>（復元フレーズ）を、番号をつけて札に書き写します。</li>
-          <li>札のすみに、使ったウォレットの名前と、アドレスの種類（bc1q など）も書き添えます。受け取った人が、同じ形で復元できます。</li>
+          <li><span class="ja">ウォレットアプリで、<b>新しいウォレット</b>をつくります。ふだん使いのウォレットとは分けてください。</span><span class="en">Create a <b>new wallet</b> in your wallet app. Keep it separate from your everyday wallet.</span></li>
+          <li><span class="ja">表示された<b>12語</b>（復元フレーズ）を、番号をつけて札に書き写します。</span><span class="en">Copy the <b>12 words</b> (recovery phrase) onto the slip, numbered.</span></li>
+          <li><span class="ja">札のすみに、使ったウォレットの名前と、アドレスの種類（bc1q など）も書き添えます。受け取った人が、同じ形で復元できます。</span><span class="en">In a corner of the slip, note the wallet’s name and the address type (e.g. bc1q), so whoever receives it can restore it the same way.</span></li>
         </ol>
-        <p class="note">パスフレーズ（追加の合言葉）は付けないでください。付けると、札に書いていない合言葉がなければ復元できません。</p>
+        <p class="note"><span class="ja">パスフレーズ（追加の合言葉）は付けないでください。付けると、札に書いていない合言葉がなければ復元できません。</span><span class="en">Don’t add a passphrase (an extra word). If you do, the slip alone won’t be enough to restore it.</span></p>
         <figure class="slip">
-          <svg viewBox="0 0 320 196" role="img" aria-label="札の書き方の例。12語を番号つきで2列に書き、下にウォレットの名前とアドレスの種類を書く">
+          <svg viewBox="0 0 320 196" role="img" data-l-aria-label="札の書き方の例。12語を番号つきで2列に書き、下にウォレットの名前とアドレスの種類を書く|Example slip: 12 numbered words in two columns, with the wallet name and address type below">
             <rect x="1" y="1" width="318" height="194" fill="rgba(230,237,242,.03)" stroke="rgba(150,180,200,.35)" stroke-width="1.2"/>
             <path d="M1 14V1H14M306 1H319V14M319 182V195H306M14 195H1V182" stroke="#FFB04A" stroke-width="1.4" fill="none"/>
             <g font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" fill="#8D9BA6">
@@ -79,251 +81,283 @@
               <text x="166" y="34">07</text><text x="166" y="56">08</text><text x="166" y="78">09</text><text x="166" y="100">10</text><text x="166" y="122">11</text><text x="166" y="144">12</text>
             </g>
             <path d="M40 36h106M40 58h106M40 80h106M40 102h106M40 124h106M40 146h106M188 36h106M188 58h106M188 80h106M188 102h106M188 124h106M188 146h106" stroke="rgba(150,180,200,.35)" stroke-width="1" stroke-linecap="round"/>
-            <g font-family="Zen Kaku Gothic New, sans-serif" font-size="10.5" fill="#8D9BA6"><text x="18" y="176">ウォレット</text><text x="188" y="176">種類 bc1q</text></g>
-            <path d="M74 178h86M244 178h50" stroke="rgba(150,180,200,.35)" stroke-width="1" stroke-linecap="round"/>
+            <g font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" fill="#8D9BA6"><text x="18" y="176">WALLET</text><text x="188" y="176">TYPE bc1q</text></g>
+            <path d="M64 178h96M252 178h42" stroke="rgba(150,180,200,.35)" stroke-width="1" stroke-linecap="round"/>
           </svg>
-          <figcaption>札の書き方（例）。細いペンで、小さくても読める字で。</figcaption>
+          <figcaption><span class="ja">札の書き方（例）。細いペンで、小さくても読める字で。</span><span class="en">How to fill in the slip. Use a fine pen and write small but legibly.</span></figcaption>
         </figure>
       </div>
       <div class="panel brk" id="m-key" hidden>
         <ol class="how">
-          <li>このコイン専用の<b>秘密鍵</b>を1つ用意します（WIF形式。5・K・L で始まる文字列）。</li>
-          <li>秘密鍵を、札にはっきり書き写します。1文字ちがうだけで、復元できなくなります。</li>
-          <li>使ったウォレットの名前も書き添えます。</li>
+          <li><span class="ja">このケース専用の<b>秘密鍵</b>を1つ用意します（WIF形式。5・K・L で始まる文字列）。</span><span class="en">Prepare one <b>private key</b> just for this case (WIF format, starting with 5, K or L).</span></li>
+          <li><span class="ja">秘密鍵を、札にはっきり書き写します。1文字ちがうだけで、復元できなくなります。</span><span class="en">Copy the private key clearly onto the slip. A single wrong character makes it unrecoverable.</span></li>
+          <li><span class="ja">使ったウォレットの名前も書き添えます。</span><span class="en">Note the wallet’s name as well.</span></li>
         </ol>
-        <p class="note">秘密鍵を読み込める（スイープできる）ウォレットは、12語より限られます。贈るなら、12語がおすすめです。</p>
+        <p class="note"><span class="ja">秘密鍵を読み込める（スイープできる）ウォレットは、12語より限られます。贈るなら、12語がおすすめです。</span><span class="en">Fewer wallets can import (sweep) a private key than a 12-word phrase. For gifts, 12 words are the safer choice.</span></p>
       </div>
       <div class="safe">
         <span class="led" aria-hidden="true"></span>
-        <span>12語や秘密鍵は、この画面には入力しません。紙に手で書くだけです。写真にも撮らないでください。</span>
+        <span><span class="ja">12語や秘密鍵は、この画面には入力しません。紙に手で書くだけです。写真にも撮らないでください。</span><span class="en">You never type the 12 words or private key into this page — you only write them by hand. Don’t photograph them either.</span></span>
       </div>
       <div class="nav">
-        <button type="button" class="btn primary wide" data-next>鍵をつくって、札に書いた</button>
-        <button type="button" class="link-btn" data-back>もどる</button>
+        <button type="button" class="btn primary wide" data-next><span class="ja">鍵をつくって、札に書いた</span><span class="en">I created the key and wrote the slip</span></button>
+        <button type="button" class="link-btn" data-back><span class="ja">もどる</span><span class="en">Back</span></button>
       </div>
     </section>
 
     <!-- 2 札 -->
     <section class="step" id="s2" data-step="2" aria-labelledby="h2" hidden>
       <p class="label kicker">T−4 · VERIFY SLIP</p>
-      <h2 class="h" id="h2" tabindex="-1">札を確かめる</h2>
-      <p class="lead">確かめるのは、お使いのウォレットで。このサイトは、確かめるために鍵を求めません。</p>
+      <h2 class="h" id="h2" tabindex="-1"><span class="ja">札を確かめる</span><span class="en">Verify the slip</span></h2>
+      <p class="lead"><span class="ja">確かめるのは、お使いのウォレットで。このサイトは、確かめるために鍵を求めません。</span><span class="en">You verify it in your own wallet. This site never asks for the key to check it.</span></p>
       <div class="checks" id="checks">
         <button type="button" class="ck" data-ck="0" aria-pressed="false"><span class="ck-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="ck-t"></span></button>
         <button type="button" class="ck" data-ck="1" aria-pressed="false"><span class="ck-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="ck-t"></span></button>
         <button type="button" class="ck" data-ck="2" aria-pressed="false"><span class="ck-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="ck-t"></span></button>
       </div>
       <details class="more" id="restore-how">
-        <summary>復元して確かめる方法</summary>
+        <summary><span class="ja">復元して確かめる方法</span><span class="en">How to verify by restoring</span></summary>
         <div>
-          <p>まだ入金していないので、試しても失うものはありません。</p>
+          <p><span class="ja">まだ入金していないので、試しても失うものはありません。</span><span class="en">Nothing has been deposited yet, so there’s nothing to lose by testing.</span></p>
           <ol>
             <li id="rh-1"></li>
-            <li>出てきた最初の受取アドレスが、手順 T−5 のウォレットと同じなら、札は正しく書けています。</li>
-            <li>確かめたら、復元した側のウォレットは削除してかまいません。ふだん使いのウォレットは消さないでください。</li>
+            <li><span class="ja">出てきた最初の受取アドレスが、手順 T−5 のウォレットと同じなら、札は正しく書けています。</span><span class="en">If the first receive address matches the wallet from T−5, the slip is correct.</span></li>
+            <li><span class="ja">確かめたら、復元した側のウォレットは削除してかまいません。ふだん使いのウォレットは消さないでください。</span><span class="en">After checking, you can delete the restored copy. Don’t delete your everyday wallet.</span></li>
           </ol>
-          <p>違ったときは、書き間違いか、ウォレットの種類（アドレスの形）の違いです。新しい鍵でつくり直すのが確実です。まだ何も書き込んでいないので、やり直せます。</p>
+          <p><span class="ja">違ったときは、書き間違いか、ウォレットの種類（アドレスの形）の違いです。新しい鍵でつくり直すのが確実です。まだ何も書き込んでいないので、やり直せます。</span><span class="en">If it doesn’t match, it’s a copying mistake or a different wallet type (address format). Starting over with a new key is the surest fix — nothing has been written yet.</span></p>
         </div>
       </details>
       <div class="nav">
-        <button type="button" class="btn primary wide" data-next id="checks-next" aria-disabled="true">すべて確かめると進めます</button>
-        <button type="button" class="link-btn" data-back>もどる</button>
+        <button type="button" class="btn primary wide" data-next id="checks-next" aria-disabled="true"></button>
+        <button type="button" class="link-btn" data-back><span class="ja">もどる</span><span class="en">Back</span></button>
       </div>
     </section>
 
     <!-- 3 座標 -->
     <section class="step" id="s3" data-step="3" aria-labelledby="h3" hidden>
       <p class="label kicker">T−3 · ADDRESS LOCK</p>
-      <h2 class="h" id="h3" tabindex="-1">座標を照合する</h2>
-      <p class="lead">T−5 のウォレットの「受け取る」画面から、受取アドレスを貼り付けます。</p>
+      <h2 class="h" id="h3" tabindex="-1"><span class="ja">座標を照合する</span><span class="en">Lock the coordinates</span></h2>
+      <p class="lead"><span class="ja">T−5 のウォレットの「受け取る」画面から、受取アドレスを貼り付けます。</span><span class="en">Paste the receive address from the “Receive” screen of the wallet you made in T−5.</span></p>
       <div class="field">
-        <label class="field-l label" for="addr">RECEIVE ADDRESS · 受取アドレス</label>
+        <label class="field-l label" for="addr">RECEIVE ADDRESS · <span class="ja">受取アドレス</span><span class="en">Receive address</span></label>
         <div class="addr-row">
           <textarea id="addr" rows="2" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="bc1q…" aria-describedby="addr-msg"></textarea>
-          <button type="button" class="paste press" id="paste">貼り付け</button>
+          <button type="button" class="paste press" id="paste"><span class="ja">貼り付け</span><span class="en">Paste</span></button>
         </div>
       </div>
       <p class="msg" id="addr-msg" aria-live="polite"></p>
-      <div class="seg" id="net-seg" role="group" aria-label="テスト用のネットワーク" hidden>
+      <div class="seg" id="net-seg" role="group" data-l-aria-label="テスト用のネットワーク|Test network" hidden>
         <span class="seg-ind l" aria-hidden="true"></span>
         <button type="button" data-net="test" aria-pressed="true">testnet4</button>
         <button type="button" data-net="signet" aria-pressed="false">signet</button>
       </div>
       <div class="verify" id="verify" hidden>
-        <p class="hint">ウォレットの画面と見比べて、合っていたチップを押してください。</p>
+        <p class="hint"><span class="ja">ウォレットの画面と見比べて、合っていたチップを押してください。</span><span class="en">Compare with your wallet’s screen and tap each chunk that matches.</span></p>
         <div class="chips" id="chips"></div>
-        <p class="count num" id="chip-count">照合 0 / 0</p>
+        <p class="count num" id="chip-count"></p>
       </div>
       <div class="field">
-        <label class="field-l label" for="name">CALLSIGN · 名前やひとこと（なくてもかまいません）</label>
-        <input id="name" type="text" maxlength="40" placeholder="はるへ" autocomplete="off" enterkeyhint="done" aria-describedby="name-msg">
+        <label class="field-l label" for="name">CALLSIGN · <span class="ja">名前やひとこと（なくてもかまいません）</span><span class="en">A name or short note (optional)</span></label>
+        <input id="name" type="text" maxlength="40" data-l-placeholder="はるへ|For Haru" placeholder="はるへ" autocomplete="off" enterkeyhint="done" aria-describedby="name-msg">
         <div class="meter" id="meter" aria-hidden="true"><span></span></div>
-        <p class="msg sub" id="name-msg">コックピットの上に出ます。</p>
+        <p class="msg sub" id="name-msg"></p>
       </div>
-      <p class="note">このアドレスはコインに書き込まれ、かざした人は誰でも残高を見られます。動かせるのは、札の鍵を持つ人だけです。</p>
+      <p class="note"><span class="ja">このアドレスは蓋のタグに書き込まれ、かざした人は誰でも残高を見られます。動かせるのは、札の鍵を持つ人だけです。</span><span class="en">This address goes onto the lid’s tag, so anyone who taps it can see the balance. Only whoever holds the slip’s key can move it.</span></p>
       <div class="nav">
-        <button type="button" class="btn primary wide" data-next id="addr-next" aria-disabled="true">すべて照合すると進めます</button>
-        <button type="button" class="link-btn" data-back>もどる</button>
+        <button type="button" class="btn primary wide" data-next id="addr-next" aria-disabled="true"></button>
+        <button type="button" class="link-btn" data-back><span class="ja">もどる</span><span class="en">Back</span></button>
       </div>
     </section>
 
     <!-- 4 NFC -->
     <section class="step" id="s4" data-step="4" aria-labelledby="h4" hidden>
       <p class="label kicker">T−2 · NFC UPLINK</p>
-      <h2 class="h" id="h4" tabindex="-1">NFCに書き込む</h2>
-      <p class="lead">コインの中のタグに、このコインのコックピットのURLを書き込みます。</p>
-      <div class="seg" id="os-seg" role="group" aria-label="お使いのスマホ">
-        <span class="seg-ind l" aria-hidden="true"></span>
-        <button type="button" data-os="android" aria-pressed="true">Android（Chrome）</button>
-        <button type="button" data-os="iphone" aria-pressed="false">iPhone・その他</button>
-      </div>
+      <h2 class="h" id="h4" tabindex="-1"><span class="ja">NFCに書き込む</span><span class="en">Write the NFC tag</span></h2>
+      <p class="lead"><span class="ja">蓋のNFCタグに、このケースのコックピットのURLを書き込みます。使うのは、無料のアプリ「NFC Tools」（開発元 wakdev）です。</span><span class="en">Write this case’s cockpit URL to the NFC tag in the lid, using the free app “NFC Tools” by wakdev.</span></p>
       <div class="urlbox brk">
-        <div class="urlbox-l"><span class="label dim">UPLINK URL · 書き込むURL</span><span class="num" id="url-size"></span></div>
+        <div class="urlbox-l"><span class="label dim">UPLINK URL</span><span class="num" id="url-size"></span></div>
         <code id="url"></code>
-      </div>
-
-      <div class="os-panel" id="os-android">
-        <p class="note" id="no-webnfc" hidden>このブラウザは、NFCへの書き込みに対応していません。Android の Chrome で開くか、「iPhone・その他」の方法で書き込んでください。</p>
-        <div class="nfc-wrap">
-          <button type="button" class="nfc" id="nfc-write" aria-describedby="nfc-sub">
-            <span class="ring" aria-hidden="true"></span><span class="ring" aria-hidden="true"></span><span class="ring" aria-hidden="true"></span>
-            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8.5a8 8 0 0 1 0 7"/><path d="M9.5 6.5a12 12 0 0 1 0 11"/><path d="M13 4.5a16 16 0 0 1 0 15"/><circle cx="17.5" cy="12" r="1.2" fill="currentColor"/></svg>
-            <svg class="ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
-            <span class="sr-only" id="nfc-sr">NFCに書き込む</span>
-          </button>
-          <strong id="nfc-text">NFCに書き込む</strong>
-          <span class="sub" id="nfc-sub">押したら、コインをスマホの背面に当てて、そのまま待ちます。NFCの位置は機種によって違います。</span>
-        </div>
-        <div class="after" id="nfc-after" hidden>
-          <button type="button" class="btn wide dim" id="nfc-verify">読み取って確かめる</button>
-          <p class="msg sub" id="verify-msg">コインをいったん離してから押し、もう一度当てます。</p>
-          <button type="button" class="btn wide dim" id="nfc-lock" aria-disabled="true">確かめると、ロックできます</button>
-          <p class="sub" id="lock-msg">ロックすると、だれもこのタグを書き換えられなくなります（偽のページへのすり替えを防げます）。あなた自身も、二度と書き換えられません。ロックしなくても、次へ進めます。</p>
+        <div class="url-acts">
+          <button type="button" class="btn primary" id="copy-url"><span class="ja">URLをコピー</span><span class="en">Copy URL</span></button>
+          <button type="button" class="btn dim" id="share-url" hidden><span class="ja">共有</span><span class="en">Share</span></button>
         </div>
       </div>
 
-      <div class="os-panel" id="os-iphone" hidden>
-        <div class="panel brk">
-          <p class="p">iPhone のブラウザからは、NFCに書き込めません。書き込み用のアプリ（例：NFC Tools）を使います。</p>
-          <button type="button" class="btn wide" id="copy-url">URLをコピー</button>
-          <ol class="how">
-            <li>アプリで「書き込む（Write）」→「レコードを追加（Add a record）」→「URL / URI」を選びます。</li>
-            <li>コピーしたURLを貼り付けます。アプリによっては「https://」が先に入っているので、二重にならないように。</li>
-            <li>書き込みを押して、コインを iPhone の上部に当てます。</li>
-            <li>ホーム画面に戻ってコインをかざし、出てきた通知から、コックピットが開くか確かめます。</li>
-          </ol>
-        </div>
-        <button type="button" class="ck" id="ios-ck" aria-pressed="false"><span class="ck-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="ck-t">書き込んで、かざすとコックピットが開いた</span></button>
-        <p class="sub">ロックはアプリの機能で行えます（NFC Tools なら「その他（Other）」→「タグをロック（Lock tag）」）。取り消せません。</p>
+      <div class="seg" id="os-seg" role="group" data-l-aria-label="お使いのスマホ|Your phone">
+        <span class="seg-ind l" aria-hidden="true"></span>
+        <button type="button" data-os="iphone" aria-pressed="true">iPhone</button>
+        <button type="button" data-os="android" aria-pressed="false">Android</button>
       </div>
+      <div class="os-panel" id="os-iphone">
+        <ol class="how">
+          <li><span class="ja">App Store で「NFC Tools」（開発元 <b>wakdev</b>）を入れて、開きます。</span><span class="en">Install “NFC Tools” (developer: <b>wakdev</b>) from the App Store and open it.</span></li>
+          <li><span class="ja"><kbd class="kc">書く</kbd>（Write）→ <kbd class="kc">レコードを追加</kbd>（Add a record）→ <kbd class="kc">URL / URI</kbd> を選びます。</span><span class="en">Tap <kbd class="kc">Write</kbd> → <kbd class="kc">Add a record</kbd> → <kbd class="kc">URL / URI</kbd>.</span></li>
+          <li><span class="ja">コピーしたURLを貼り付けて <kbd class="kc">OK</kbd>。「https://」が二重になっていないか確かめます。</span><span class="en">Paste the copied URL and tap <kbd class="kc">OK</kbd>. Make sure “https://” isn’t doubled.</span></li>
+          <li><span class="ja"><kbd class="kc">書く</kbd>（Write）を押し、iPhone の<b>上の端</b>（カメラのあたり）を蓋に当てて、完了の表示が出るまで動かしません。</span><span class="en">Tap <kbd class="kc">Write</kbd>, then hold the <b>top edge</b> of the iPhone (near the camera) to the lid until it says it’s done.</span></li>
+        </ol>
+        <a class="store" href="https://apps.apple.com/app/nfc-tools/id1252962749" target="_blank" rel="noopener noreferrer"><span class="label dim">APP STORE</span><span>NFC Tools · wakdev</span></a>
+      </div>
+      <div class="os-panel" id="os-android" hidden>
+        <ol class="how">
+          <li><span class="ja">設定で <b>NFC をオン</b>にします（「接続」などの項目の中にあります）。</span><span class="en">Turn <b>NFC on</b> in Settings (usually under Connections).</span></li>
+          <li><span class="ja">Google Play で「NFC Tools」（開発元 <b>wakdev</b>）を入れて、開きます。</span><span class="en">Install “NFC Tools” (developer: <b>wakdev</b>) from Google Play and open it.</span></li>
+          <li><span class="ja"><kbd class="kc">書く</kbd>（Write）→ <kbd class="kc">レコードを追加</kbd>（Add a record）→ <kbd class="kc">URL / URI</kbd> を選び、URLを貼り付けて <kbd class="kc">OK</kbd>。</span><span class="en">Tap <kbd class="kc">Write</kbd> → <kbd class="kc">Add a record</kbd> → <kbd class="kc">URL / URI</kbd>, paste the URL and tap <kbd class="kc">OK</kbd>.</span></li>
+          <li><span class="ja"><kbd class="kc">書く</kbd>（Write）を押し、スマホの<b>背面</b>（中央〜上のあたり）を蓋に当てて待ちます。</span><span class="en">Tap <kbd class="kc">Write</kbd> and hold the <b>back</b> of the phone (center to upper area) to the lid.</span></li>
+        </ol>
+        <a class="store" href="https://play.google.com/store/apps/details?id=com.wakdev.wdnfc" target="_blank" rel="noopener noreferrer"><span class="label dim">GOOGLE PLAY</span><span>NFC Tools · wakdev</span></a>
+      </div>
+      <p class="note"><span class="ja">書き込むのは、このURLの1件だけにしてください（iPhone は最初のURLしか読みません）。似た名前の別アプリもあるので、開発元が wakdev のものを選んでください。アプリの表示は、バージョンや言語の設定で少し違うことがあります。</span><span class="en">Write only this one URL record (iPhone only reads the first URL). Similarly named apps exist, so pick the one by wakdev. Labels may differ slightly by app version and language.</span></p>
+
+      <div class="testbox brk" id="testbox">
+        <p class="label sig">TEST · <span class="ja">かざして確かめる</span><span class="en">Tap to verify</span></p>
+        <p class="p"><span class="ja">アプリを閉じて、画面をつけたまま蓋をスマホにかざします。iPhone は出てきた通知を、Android は開いたページを見て、<b>このケースのコックピット</b>が開けば成功です。</span><span class="en">Close the app and, with the screen on, hold the lid to your phone. On iPhone tap the notification; on Android check the page that opens. If <b>this case’s cockpit</b> opens, you’re done.</span></p>
+        <p class="msg ok" id="uplink-msg" hidden><span class="ja">✓ このブラウザで、このケースのコックピットが開かれました</span><span class="en">✓ This case’s cockpit was opened in this browser</span></p>
+        <button type="button" class="ck" id="tap-ck" aria-pressed="false"><span class="ck-box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="ck-t"><span class="ja">書き込んで、かざすとコックピットが開いた</span><span class="en">I wrote it, and tapping opens the cockpit</span></span></button>
+        <p class="sub"><span class="ja">iPhone 7〜X は、コントロールセンターの「NFCタグリーダー」を押してからかざします。</span><span class="en">On iPhone 7 to X, open “NFC Tag Reader” in Control Center first, then tap.</span></p>
+      </div>
+
+      <details class="more">
+        <summary><span class="ja">ロックする（任意・取り消せません）</span><span class="en">Lock the tag (optional, permanent)</span></summary>
+        <div>
+          <p><span class="ja">ロックすると、だれもこのタグを書き換えられなくなります（偽のページへのすり替えを防げます）。あなた自身も、二度と書き換えられません。かざして確かめてから行ってください。</span><span class="en">Locking stops anyone from rewriting the tag (so it can’t be swapped for a fake page). You won’t be able to rewrite it either. Do this only after the tap test works.</span></p>
+          <p><span class="ja">NFC Tools で <kbd class="kc">その他</kbd>（Other）→ <kbd class="kc">タグをロック</kbd>（Lock tag）→ 確認で <kbd class="kc">はい</kbd>（Yes）を押し、蓋をかざします。</span><span class="en">In NFC Tools, tap <kbd class="kc">Other</kbd> → <kbd class="kc">Lock tag</kbd> → <kbd class="kc">Yes</kbd>, then hold the lid to the phone.</span></p>
+        </div>
+      </details>
+
+      <details class="more" id="webnfc-more" hidden>
+        <summary><span class="ja">Android の Chrome なら、このページから直接書き込めます</span><span class="en">On Android Chrome, you can write directly from this page</span></summary>
+        <div>
+          <div class="nfc-wrap">
+            <button type="button" class="nfc" id="nfc-write" aria-describedby="nfc-sub">
+              <span class="ring" aria-hidden="true"></span><span class="ring" aria-hidden="true"></span><span class="ring" aria-hidden="true"></span>
+              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8.5a8 8 0 0 1 0 7"/><path d="M9.5 6.5a12 12 0 0 1 0 11"/><path d="M13 4.5a16 16 0 0 1 0 15"/><circle cx="17.5" cy="12" r="1.2" fill="currentColor"/></svg>
+              <svg class="ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+              <span class="sr-only" id="nfc-sr"></span>
+            </button>
+            <strong id="nfc-text"></strong>
+            <span class="sub" id="nfc-sub"></span>
+          </div>
+          <div class="after" id="nfc-after" hidden>
+            <button type="button" class="btn wide dim" id="nfc-verify"></button>
+            <p class="msg sub" id="verify-msg"></p>
+            <button type="button" class="btn wide dim" id="nfc-lock" aria-disabled="true"></button>
+            <p class="sub" id="lock-msg"><span class="ja">ロックすると、だれもこのタグを書き換えられなくなります。あなた自身も、二度と書き換えられません。ロックしなくても、次へ進めます。</span><span class="en">Locking means nobody — including you — can ever rewrite this tag. You can continue without locking.</span></p>
+          </div>
+        </div>
+      </details>
+
+      <a class="guide-link" href="../nfc/"><span class="ja">NFC Tools の詳しい使い方（画面ごとの説明・うまくいかないとき）</span><span class="en">Detailed NFC Tools guide (screen by screen, troubleshooting)</span> →</a>
 
       <div class="nav">
-        <button type="button" class="btn primary wide" data-next id="nfc-next" aria-disabled="true">書き込むと進めます</button>
-        <button type="button" class="link-btn" data-back>もどる</button>
+        <button type="button" class="btn primary wide" data-next id="nfc-next" aria-disabled="true"></button>
+        <button type="button" class="link-btn" data-back><span class="ja">もどる</span><span class="en">Back</span></button>
       </div>
     </section>
 
     <!-- 5 封印 -->
     <section class="step" id="s5" data-step="5" aria-labelledby="h5" hidden>
       <p class="label kicker">T−1 · SEAL</p>
-      <h2 class="h" id="h5" tabindex="-1">封印する</h2>
-      <p class="lead">札を折ってコインに納めます。最後に、封印シールを貼ります。</p>
-      <figure class="scene" id="scene" role="img" aria-label="コインに封印シールを貼るところ">
-        <svg viewBox="0 0 300 300" aria-hidden="true">
+      <h2 class="h" id="h5" tabindex="-1"><span class="ja">封印する</span><span class="en">Seal it</span></h2>
+      <p class="lead"><span class="ja">札を折ってケースに納め、蓋をカチッと閉めます。最後に、蓋と本体のつなぎ目をまたぐように、側面へセキュリティシールを貼ります。</span><span class="en">Fold the slip into the case and slide the lid shut until it clicks. Then put the security seal on the side so it bridges the lid and the body.</span></p>
+      <figure class="scene" id="scene" role="img" data-l-aria-label="HODLケースの側面にセキュリティシールを貼るところ|Applying the security seal to the side of the HODL case">
+        <svg viewBox="0 0 320 210" aria-hidden="true">
           <defs>
-            <radialGradient id="coin-g" cx="40%" cy="35%"><stop offset="0" stop-color="#2A3540"/><stop offset=".7" stop-color="#121A21"/><stop offset="1" stop-color="#0A0F14"/></radialGradient>
+            <linearGradient id="case-top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26313b"/><stop offset="1" stop-color="#151c23"/></linearGradient>
+            <linearGradient id="case-side" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#121920"/><stop offset="1" stop-color="#070a0d"/></linearGradient>
             <linearGradient id="holo-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE9C4"/><stop offset=".3" stop-color="#9FD8FF"/><stop offset=".55" stop-color="#C9B8FF"/><stop offset=".8" stop-color="#FFB04A"/><stop offset="1" stop-color="#E6F7FF"/></linearGradient>
-            <clipPath id="seal-clip"><circle cx="150" cy="150" r="58"/></clipPath>
+            <clipPath id="seal-clip"><rect x="212" y="88" width="34" height="74" rx="2"/></clipPath>
           </defs>
-          <circle cx="150" cy="158" r="128" fill="#000" opacity=".5"/>
-          <circle cx="150" cy="150" r="128" fill="url(#coin-g)" stroke="rgba(150,180,200,.45)" stroke-width="1.4"/>
-          <circle cx="150" cy="150" r="116" fill="none" stroke="rgba(255,176,74,.4)" stroke-width="1" stroke-dasharray="2 4"/>
-          <circle cx="150" cy="150" r="100" fill="none" stroke="rgba(150,180,200,.22)" stroke-width="1"/>
-          <circle cx="150" cy="150" r="62" fill="#05080B" stroke="rgba(150,180,200,.4)" stroke-width="1"/>
-          <path d="M126 140h48M126 150h48M126 160h34" stroke="rgba(230,237,242,.35)" stroke-width="2" stroke-linecap="round"/>
-          <g font-family="JetBrains Mono, ui-monospace, monospace" font-size="8.5" fill="rgba(255,176,74,.7)" text-anchor="middle" letter-spacing="2"><text x="150" y="40">INFINITY</text><text x="150" y="266">KEY CHAMBER</text></g>
+          <ellipse cx="160" cy="186" rx="138" ry="12" fill="#000" opacity=".55"/>
+          <path d="M44 70H262Q292 70 292 100V150Q292 172 270 172H50Q28 172 28 150V100Q28 70 44 70Z" fill="url(#case-side)" stroke="rgba(150,180,200,.4)" stroke-width="1.2"/>
+          <path d="M44 56H262Q290 56 290 86V100H30V86Q30 56 44 56Z" fill="url(#case-top)" stroke="rgba(150,180,200,.45)" stroke-width="1.2"/>
+          <path d="M30 118H292" stroke="rgba(255,176,74,.55)" stroke-width="1.2" stroke-dasharray="4 4"/>
+          <g stroke="rgba(150,180,200,.18)" stroke-width="3"><path d="M64 128V160M76 128V160M88 128V160M100 128V160M112 128V160"/></g>
+          <circle cx="150" cy="78" r="12" fill="none" stroke="rgba(255,176,74,.55)" stroke-width="1.2"/>
+          <path d="M146 74a6 6 0 0 1 0 8M150 71a10 10 0 0 1 0 14" fill="none" stroke="rgba(255,176,74,.55)" stroke-width="1.2" stroke-linecap="round"/>
+          <g font-family="JetBrains Mono, ui-monospace, monospace" font-size="8.5" fill="rgba(255,176,74,.75)" letter-spacing="1.6">
+            <text x="34" y="48">LID · NFC</text><text x="34" y="196">BODY</text>
+          </g>
           <g class="band">
-            <circle cx="150" cy="150" r="58" fill="url(#holo-g)" opacity=".92"/>
-            <g clip-path="url(#seal-clip)"><path class="shine" d="M70 230l26 0l70-160l-26 0z" fill="#fff" fill-opacity=".6"/></g>
-            <circle cx="150" cy="150" r="58" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.2"/>
-            <circle cx="150" cy="150" r="46" fill="none" stroke="rgba(3,5,7,.35)" stroke-width="1" stroke-dasharray="1 3"/>
+            <rect x="212" y="88" width="34" height="74" rx="2" fill="url(#holo-g)" opacity=".94"/>
+            <g clip-path="url(#seal-clip)"><path class="shine" d="M180 170l14 0l40-90l-14 0z" fill="#fff" fill-opacity=".6"/></g>
+            <rect x="212" y="88" width="34" height="74" rx="2" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.2"/>
+            <path d="M218 98h22M218 106h14M218 146h22" stroke="rgba(3,5,7,.4)" stroke-width="2"/>
           </g>
           <g class="stamp">
-            <circle cx="150" cy="150" r="26" fill="rgba(3,5,7,.86)" stroke="#6DFFB3" stroke-width="2"/>
-            <text x="150" y="160" text-anchor="middle" font-family="Zen Kaku Gothic New, sans-serif" font-weight="900" font-size="26" fill="#6DFFB3">封</text>
+            <circle cx="229" cy="125" r="22" fill="rgba(3,5,7,.88)" stroke="#6DFFB3" stroke-width="2"/>
+            <path d="M219 125l7 7 13-14" fill="none" stroke="#6DFFB3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
           </g>
         </svg>
       </figure>
       <ul class="tips">
-        <li>貼る前に、コインの面のほこりや指の脂をふき取る</li>
-        <li>台紙から端を持ってはがし、まっすぐ当てる</li>
-        <li>貼ったら、指で端までしっかり押さえる</li>
+        <li><span class="ja">貼る前に、側面のほこりや指の脂をふき取る</span><span class="en">Wipe dust and fingerprints off the side first</span></li>
+        <li><span class="ja">蓋と本体のつなぎ目をまたぐように、まっすぐ当てる</span><span class="en">Place it straight, across the seam between lid and body</span></li>
+        <li><span class="ja">貼ったら、指で端までしっかり押さえる</span><span class="en">Press it down firmly, all the way to the edges</span></li>
       </ul>
       <div class="hold-wrap">
         <button type="button" class="hold" id="hold" aria-describedby="hold-sub">
           <svg viewBox="0 0 132 132" aria-hidden="true"><circle class="track" cx="66" cy="66" r="60"/><circle class="prog" id="hold-prog" cx="66" cy="66" r="60"/></svg>
-          <span class="c" aria-hidden="true">封</span>
-          <span class="sr-only">長押しで封じる</span>
+          <span class="c" aria-hidden="true"><span class="ja">封</span><span class="en">SEAL</span></span>
+          <span class="sr-only"><span class="ja">長押しで封じる</span><span class="en">Press and hold to seal</span></span>
         </button>
-        <strong id="hold-text">封印シールを貼ったら、長押しで封じる</strong>
-        <span class="sub" id="hold-sub">押しつづけると、輪が一周して封じます</span>
-        <button type="button" class="link-btn small" id="hold-alt">長押しせずに封じる</button>
+        <strong id="hold-text"></strong>
+        <span class="sub" id="hold-sub"></span>
+        <button type="button" class="link-btn small" id="hold-alt"></button>
       </div>
       <div class="nav">
-        <button type="button" class="link-btn" data-back>もどる</button>
+        <button type="button" class="link-btn" data-back><span class="ja">もどる</span><span class="en">Back</span></button>
       </div>
     </section>
 
     <!-- 6 完了 -->
     <section class="step" id="s6" data-step="6" aria-labelledby="h6" hidden>
       <div class="preview brk">
-        <p class="pv-name" id="pv-name" hidden></p>
         <div class="pv-em" id="pv-em"></div>
-        <span class="tchip s-empty"><span class="t">STANDBY · まだ空</span></span>
+        <span class="tchip s-empty"><span class="t">STANDBY · <span class="ja">まだ空</span><span class="en">EMPTY</span></span></span>
       </div>
       <p class="label kicker center">SEALED · AWAITING IGNITION</p>
-      <h2 class="h center" id="h6" tabindex="-1">封じました</h2>
-      <p class="lead center">好きなときに入金を。承認されると、そのブロックから特異点の紋が描かれます。</p>
+      <h2 class="h center" id="h6" tabindex="-1"><span class="ja">封じました</span><span class="en">Sealed</span></h2>
+      <p class="lead center"><span class="ja">好きなときに入金を。承認されると、そのブロックからミッションパッチが描かれます。</span><span class="en">Deposit whenever you like. When it confirms, your mission patch is drawn from that block.</span></p>
       <div class="acts">
-        <button type="button" class="btn primary wide" id="show-qr">入金用のQRを表示</button>
-        <a class="btn wide" id="open-m" href="../m/">コックピットを開く</a>
+        <button type="button" class="btn primary wide" id="show-qr"><span class="ja">入金用のQRを表示</span><span class="en">Show deposit QR</span></button>
+        <a class="btn wide" id="open-m" href="../m/"><span class="ja">コックピットを開く</span><span class="en">Open the cockpit</span></a>
       </div>
       <div class="card brk">
-        <h3 class="card-h label">NEXT · これから</h3>
+        <h3 class="card-h label">NEXT · <span class="ja">これから</span><span class="en">What’s next</span></h3>
         <ul class="need">
-          <li>入金は、このコインのアドレスへ。ウォレットの「受け取る」画面は、入金のあと別のアドレスに変わることがあります。コインに数えられるのは、このアドレスへの入金だけです。</li>
-          <li>紋は、最初に承認された入金のブロックで決まります。少額で試しに入金すると、その入金で紋が決まります。</li>
-          <li>贈るなら、T−5 のウォレットをスマホに残すか決めておきましょう。残せば、あなたも動かせます。消せば、札だけが鍵になります。</li>
+          <li><span class="ja">入金は、このケースのアドレスへ。ウォレットの「受け取る」画面は、入金のあと別のアドレスに変わることがあります。ケースに数えられるのは、このアドレスへの入金だけです。</span><span class="en">Send deposits to this case’s address. Your wallet’s “Receive” screen may switch to a new address after a deposit; only deposits to this address count for the case.</span></li>
+          <li><span class="ja">パッチは、最初に承認された入金のブロックで決まります。少額で試しに入金すると、その入金でパッチが決まります。</span><span class="en">The patch is set by the block of the first confirmed deposit. A small test deposit will set the patch.</span></li>
+          <li><span class="ja">贈るなら、T−5 のウォレットをスマホに残すか決めておきましょう。残せば、あなたも動かせます。消せば、札だけが鍵になります。</span><span class="en">If it’s a gift, decide whether to keep the T−5 wallet on your phone. Keep it and you can move the funds too; delete it and the slip is the only key.</span></li>
         </ul>
       </div>
       <div class="nav">
-        <button type="button" class="link-btn" id="again">別のコインを封じる</button>
+        <button type="button" class="link-btn" id="again"><span class="ja">別のケースを封じる</span><span class="en">Seal another case</span></button>
       </div>
     </section>
   </main>
 
   <footer class="foot">
     <span class="led" aria-hidden="true"></span>
-    <p>このサイトが秘密鍵や12語を尋ねることはありません</p>
+    <p><span class="ja">このサイトが秘密鍵や12語を尋ねることはありません</span><span class="en">This site will never ask for your private key or 12 words</span></p>
   </footer>
 </div>
 
-<button class="sheet-back" id="sheet-back" type="button" aria-label="閉じる" tabindex="-1"></button>
+<button class="sheet-back" id="sheet-back" type="button" data-l-aria-label="閉じる|Close" tabindex="-1"></button>
 <section class="sheet" id="qr-sheet" role="dialog" aria-modal="true" aria-labelledby="qr-title" aria-hidden="true">
   <div class="grab" aria-hidden="true"></div>
   <div class="sheet-head">
-    <h2 id="qr-title">このコインに入れる</h2>
-    <button type="button" class="x press" data-close aria-label="閉じる"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <h2 id="qr-title"><span class="ja">このケースに入れる</span><span class="en">Fund this case</span></h2>
+    <button type="button" class="x press" data-close data-l-aria-label="閉じる|Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
-  <div class="qr" id="qr" role="img" aria-label="入金用のQRコード"></div>
+  <div class="qr" id="qr" role="img" data-l-aria-label="入金用のQRコード|Deposit QR code"></div>
   <p class="qr-addr" id="qr-addr"></p>
-  <button type="button" class="btn wide" id="copy-addr">アドレスをコピー</button>
-  <p class="sheet-small">入金が承認されると、そのブロックから特異点の紋が描かれます。少額だと、あとで移すときの手数料の割合が大きくなります。</p>
+  <button type="button" class="btn wide" id="copy-addr"><span class="ja">アドレスをコピー</span><span class="en">Copy address</span></button>
+  <p class="sheet-small"><span class="ja">入金が承認されると、そのブロックからミッションパッチが描かれます。少額だと、あとで移すときの手数料の割合が大きくなります。</span><span class="en">When the deposit confirms, your mission patch is drawn from that block. With very small amounts, the fee to move it later takes a larger share.</span></p>
 </section>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<noscript><p class="noscript">この手順は JavaScript で動きます。JavaScript を有効にしてください。</p></noscript>
+<noscript><p class="noscript">この手順は JavaScript で動きます。JavaScript を有効にしてください。 / This page needs JavaScript.</p></noscript>
 <script type="module" src="../assets/js/setup.js"></script>
 </body>
 </html>
